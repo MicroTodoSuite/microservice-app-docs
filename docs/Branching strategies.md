@@ -11,6 +11,8 @@ Este documento describe y justifica las estrategias de control de versiones adop
 
 ## 👨‍💻 Equipo de Desarrollo: GitHub Flow
 
+![Github Flow](./assets/Github%20Flow.png)
+
 ### ✅ Estrategia Adoptada
 
 El equipo de desarrollo utiliza **GitHub Flow**, una estrategia ligera y ágil basada en ramas cortas y ciclos rápidos de integración. El flujo se compone de:
@@ -33,6 +35,8 @@ El equipo de desarrollo utiliza **GitHub Flow**, una estrategia ligera y ágil b
 GitHub Flow es especialmente eficaz en contextos donde el producto está en evolución constante y se requiere **frecuencia alta de integración** sin la complejidad de múltiples ramas de largo plazo (como `develop` o `release`).
 
 ## ⚙️ Equipo de Operaciones: Trunk-Based Development
+
+![Trunk-Based Development](./assets/Trunk-Based%20Development.png)
 
 ### ✅ Estrategia Adoptada
 
