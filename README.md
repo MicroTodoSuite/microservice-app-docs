@@ -16,14 +16,18 @@ microservice-app-docs/
 
 ## 🔍 Contenido Disponible
 
-1. **Estrategias de Branching**  
-   Descripción de las convenciones utilizadas para la gestión del control de versiones en los distintos repositorios del proyecto.
-   📄 [Ver archivo](./docs/Branching%20stategies.md)
+1. **Metodología Ágil**  
+   Descripción de la metodología ágil seleccionada para el proyecto.
+   📄 [Ver archivo](./docs/Agile%20methodology.md)
 
-2. **Diagramas de Arquitectura**  
+2. **Estrategias de Branching**  
+   Descripción de las convenciones utilizadas para la gestión del control de versiones en los distintos repositorios del proyecto.
+   📄 [Ver archivo](./docs/Branching%20strategies.md)
+
+3. **Diagramas de Arquitectura**  
    Representaciones visuales de la arquitectura de nube.
    📄 [Ver archivo](./docs/Architecture%20diagrams.md)
 
-3. **Informe**  
+4. **Informe**  
    Documento que resume los objetivos, la solución técnica, el proceso de despliegue, y las herramientas utilizadas en el proyecto.
    📄 [Ver archivo](./docs/Report.md)
