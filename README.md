@@ -8,8 +8,9 @@ Este repositorio centraliza toda la documentación relevante para el diseño, de
 microservice-app-docs/
 ├── docs/
 │   ├── assets/                    # Diagramas e imágenes de soporte
-│   ├── Architecture_Diagrams.md   # Diagramas de arquitectura de nube
-│   ├── Branching_Strategies.md    # Estrategias de control de versiones
+│   ├── Agile methodology.md       # Metodología ágil adoptada en el proyecto
+│   ├── Architecture diagrams.md   # Diagramas de arquitectura de nube
+│   ├── Branching strategies.md    # Estrategias de control de versiones
 │   └── Report.md                  # Informe técnico del proyecto
 └── README.md                      # Este archivo
 ```
