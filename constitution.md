@@ -13,9 +13,9 @@ Sync Impact Report
 
 # MicroTodoSuite Constitution
 
-Version: 2.0.0
+Version: 1.3.0
 
-Ratified: 2026-08-11
+Ratified: 2026-08-10
 
 Assessment basis: `docs/MicroTodoSuite evolution plan.md`, `context-snapshot.xml`, and repository/live evidence through 2026-08-10.
 
@@ -107,6 +107,19 @@ future amendment reverting to the full profile if isolation needs change.
 
 Workload activation under this profile requires namespace isolation, GitOps-only reconciliation, immutable test/scan/SBOM/signature evidence, Kyverno admission, External Secrets and IRSA where applicable, explicit probes, native production canaries, and live acceptance evidence. Capability-gated controls above MUST have a versioned follow-up spec and owner before they are claimed; their documented absence is neither an implicit pass nor a blocker for an unrelated release.
 
+## Profile selectability demonstration
+
+In addition to the cost-optimized profile adopted above (v1.2.0), this
+project also maintains a full-profile demonstration environment to prove
+the architecture is genuinely selectable based on available resources, not
+hardcoded to one topology. This full-profile cluster reuses the same
+Terraform foundation module and GitOps registration mechanism already
+proven for the economical dev cluster, instantiated as a dedicated,
+non-shared VPC and EKS cluster rather than a shared namespace. It exists to
+demonstrate architectural flexibility for evaluation purposes; the
+economical profile remains this project's operational default for
+day-to-day work.
+
 ## Current state vs. plan
 
 Status meanings: **HONORED** = concrete implementation exists; **PARTIAL** = some required behavior exists; **ASPIRATIONAL** = no implementation evidence exists; **CONTRADICTED** = current behavior violates the planned rule.
@@ -146,4 +159,4 @@ Status meanings: **HONORED** = concrete implementation exists; **PARTIAL** = som
 
 This constitution outranks feature specifications; approved feature specifications outrank plans and tasks; all of them outrank current code and deployed state. A conflicting feature specification MUST be changed to comply or blocked until a constitution amendment is approved first. Existing contradictory code creates remediation work and never establishes precedent or an implicit waiver. Ambiguity is resolved in a documented pull-request decision by the same maintainers required for an amendment, and no conversation, prompt, emergency command, or undocumented exception may override that decision hierarchy.
 
-**Version**: 2.0.0 | **Ratified**: 2026-08-11 | **Last Amended**: 2026-08-11
+**Version**: 1.3.0 | **Ratified**: 2026-08-10 | **Last Amended**: 2026-08-10
