@@ -26,6 +26,12 @@ It records agile and branching decisions plus the initial and implemented Azure 
 - Use GitOps exclusively for environment changes: commit them to `microservice-app-gitops` for ArgoCD reconciliation; never run `kubectl apply` against a GitOps-managed cluster.
 - Use one AWS account and isolate environments with separate clusters, VPCs, or namespaces.
 - The suite-wide Trunk-Based Development rule supersedes the GitHub Flow guidance in `docs/Branching strategies.md`.
+- Open every pull request through `.github/pull_request_template.md` and follow `microservice-app-docs/docs/Pull request and task tracking conventions.md`: one concern per short-lived `<type>/<summary>` branch, a Conventional Commit title with a scope, and every template section filled. Constitution principle 13 makes this binding, not advisory.
+- Keep the Spec-Driven Development commit pair intact: `test(<scope>): specify ...` must be committed failing before `feat(<scope>): implement ...`. Never squash the pair; the failing-test commit is the evidence the cycle was followed.
+- Track every task. Name in the pull-request body the task IDs it advances, qualified by repository and spec, and update `tasks.md` in that same pull request rather than a follow-up. Mark a task `[X]` only after locating and inspecting its named artifact — never from a summary, a green check, a rendered manifest, or recollection. Annotate partial delivery instead of ticking it; work no register covers either gains a task or records in the PR body why none applies.
+- Reconcile, never quietly edit, when a register and reality disagree: a specification that pins a version nobody shipped is a maintainer decision, and `microservice-app-docs/full-platform/plan-reconciliation.md` is the worked example.
+- Never merge with `--admin`, force-push to `main`, disable a branch protection rule to land your own work, or approve your own pull request. As an AI agent you may open, describe, and update a pull request; you may never approve one and never author an acceptance or approval artifact — only a named human unlocks a gate.
+- Report outcomes faithfully in commits and pull-request bodies: name what is red, say what was skipped, and correct an earlier claim that turns out to be wrong rather than leaving the record wrong.
 
 ## Notes for the Kubernetes migration
 - This repository exposes no ports and defines no environment variables. Verify both in each application repository before writing Kubernetes workloads or Services.

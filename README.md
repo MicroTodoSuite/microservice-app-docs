@@ -11,6 +11,7 @@ microservice-app-docs/
 │   ├── Agile methodology.md       # Metodología ágil adoptada en el proyecto
 │   ├── Architecture diagrams.md   # Diagramas de arquitectura de nube
 │   ├── Branching strategies.md    # Estrategias de control de versiones
+│   ├── Pull request and task tracking conventions.md  # Convenciones vinculantes de PR y trazabilidad
 │   └── Report.md                  # Informe técnico del proyecto
 └── README.md                      # Este archivo
 ```
@@ -29,6 +30,10 @@ microservice-app-docs/
    Representaciones visuales de la arquitectura de nube.
    📄 [Ver archivo](./docs/Architecture%20diagrams.md)
 
-4. **Informe**  
+4. **Convenciones de Pull Request y trazabilidad de tareas**  
+   Reglas vinculantes de formato de rama, commit y PR, y la obligación de marcar toda tarea completada en el mismo PR que la completa. Las hace obligatorias el principio 13 de la constitución.
+   📄 [Ver archivo](./docs/Pull%20request%20and%20task%20tracking%20conventions.md)
+
+5. **Informe**  
    Documento que resume los objetivos, la solución técnica, el proceso de despliegue, y las herramientas utilizadas en el proyecto.
    📄 [Ver archivo](./docs/Report.md)
