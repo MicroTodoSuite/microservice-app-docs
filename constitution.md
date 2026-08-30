@@ -1,5 +1,19 @@
 <!--
 Sync Impact Report
+- Version change: 3.0.0 -> 3.1.0
+- Added principles:
+  - 13. Traceable Delivery: pull-request format and task-record obligations become binding.
+- Modified principles: none. No existing principle is redefined or retired, so this is
+  an additive amendment.
+- Added sections: none beyond the new principle.
+- Removed sections: none.
+- Affected repositories: all nine. Each gains `.github/pull_request_template.md` and a
+  Conventions entry in `AGENTS.md` (symlinked as `CLAUDE.md`).
+- Follow-up TODOs: approve a cross-repository specification before implementing or
+  applying the full profile; reconcile the six task registers still marked as needing a
+  decision in `full-platform/plan-reconciliation.md`.
+
+Prior report (3.0.0), retained for auditability:
 - Version change: 1.3.0 -> 3.0.0
 - Modified principles:
   - Cost-Governed Design: cost evidence now gates every full-profile infrastructure apply.
@@ -8,16 +22,15 @@ Sync Impact Report
   - Proven Disaster Recovery and Disclosed Data Loss: the active-active Azure target is now an authorized delivery target.
 - Added sections: authorized full-profile rollout and economical-to-full transition safeguards.
 - Removed sections: profile selectability demonstration (replaced by the authorized rollout section).
-- Follow-up TODOs: approve a cross-repository specification before implementing or applying the full profile.
 -->
 
 # MicroTodoSuite Constitution
 
-Version: 3.0.0
+Version: 3.1.0
 
 Ratified: 2026-08-10
 
-Assessment basis: `docs/MicroTodoSuite evolution plan.md`, `context-snapshot.xml`, and repository/live evidence through 2026-08-24.
+Assessment basis: `docs/MicroTodoSuite evolution plan.md`, `context-snapshot.xml`, and repository/live evidence through 2026-08-30.
 
 ## Purpose
 
@@ -105,6 +118,22 @@ immutable production digest MUST run in both destinations. Health-based routing 
 Mesh game days MUST prove failover before real traffic is enabled, and Redis plus business
 data continuity limits MUST remain explicit until durable replication exists — Rationale:
 an untested failover path or hidden state loss is not disaster recovery.
+
+### 13. Traceable Delivery
+
+**Deliver nothing that cannot be traced back to a task and forward to its record.**
+Every pull request MUST follow `docs/Pull request and task tracking conventions.md`:
+one concern per short-lived branch, a Conventional Commit title, the required body
+sections, and the task identifiers it advances. Every completed task MUST be marked
+in the same pull request that completed it, and MUST be marked only against a located
+artifact — never from a summary, a green check, a rendered manifest, or recollection.
+Partial delivery MUST be annotated rather than ticked, work outside every register MUST
+either gain a task or record in its pull request why none applies, and a register that
+contradicts reality MUST be reconciled by a recorded decision rather than by quietly
+editing whichever side is more convenient. An AI agent MUST follow these conventions,
+MAY NOT approve a pull request, and MAY NOT author an acceptance artifact — Rationale:
+work whose record drifts from its delivery cannot be reviewed, audited, or trusted, and
+a register nobody maintains silently becomes fiction.
 
 ## Operational baseline: cost-optimized (economical)
 
@@ -206,4 +235,4 @@ Status meanings: **HONORED** = concrete implementation exists; **PARTIAL** = som
 
 This constitution outranks feature specifications; approved feature specifications outrank plans and tasks; all of them outrank current code and deployed state. A conflicting feature specification MUST be changed to comply or blocked until a constitution amendment is approved first. Existing contradictory code creates remediation work and never establishes precedent or an implicit waiver. Ambiguity is resolved in a documented pull-request decision by the same maintainers required for an amendment, and no conversation, prompt, emergency command, or undocumented exception may override that decision hierarchy.
 
-**Version**: 3.0.0 | **Ratified**: 2026-08-10 | **Last Amended**: 2026-08-24
+**Version**: 3.1.0 | **Ratified**: 2026-08-10 | **Last Amended**: 2026-08-30
