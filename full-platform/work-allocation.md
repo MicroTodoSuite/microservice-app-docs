@@ -1,8 +1,13 @@
 # Work Allocation
 
 **Date**: 2026-08-30
-**Basis**: the 236 tasks outstanding once `gitops#80` lands, classified from
+**Basis**: the tasks outstanding once `gitops#80` lands, classified from
 `full-platform/plan-reconciliation.md`.
+
+> **Updated 2026-08-30 after two maintainer decisions.** The local GitOps pilot
+> is retired (`gitops#82`), removing 44 tasks. The Azure DR leg is sequenced
+> last, confirming `architecture-review.md` §7 step 10. With both applied the
+> near-term split is **61 / 54 / 53** — see §2b.
 
 The team split the project three ways at the start — infrastructure, CI/CD,
 observability and monitoring. This document answers two questions with data
@@ -44,9 +49,108 @@ Left alone, the remaining work would repeat the imbalance: classified by
 subject matter, the 236 outstanding tasks fall 137 infrastructure (58 %), 58
 CI/CD (25 %), 41 observability (17 %).
 
+## 2b. After the two decisions — the working numbers
+
+**192 tasks remain**, of which 24 are the deferred Azure leg.
+
+| Member | Area | Near-term | Azure (last) | Total |
+| --- | --- | --- | --- | --- |
+| Esteban Gaviria | Infrastructure | **61** | 17 | 78 |
+| Juan Manuel Díaz | CI/CD and delivery | **54** | 0 | 54 |
+| Santiago Valencia | Observability | **53** | 7 | 60 |
+| | | **168** | **24** | **192** |
+
+Near-term is 36 % / 32 % / 31 %. That is as even as the plan admits, and it took
+two decisions rather than any reshuffling of tasks.
+
+### What "the Azure DR leg" actually is
+
+009 T118-T141: an AKS 1.35 cluster in its own VNet with its own locked Azure Blob
+state, a Key Vault seeded with exactly four secret names, an independent
+in-cluster ArgoCD, the already-signed production digest mirrored to ACR without
+rebuilding, a `full-prod-azure` DNS record, and then the chaos experiments and
+the complete-AWS-outage game day that prove failover works. Route 53
+latency-based active-active traffic is a further gated step (T140) needing its
+own approval.
+
+**Nothing of it exists yet** — there is no `ops/azure/` directory and no
+`clusters/aks-dr/`. It has not been started early; it is correctly last both by
+the recorded sequencing decision and by spec 009's own dependency graph, which
+makes US5 depend on the production-validated US4 digest.
+
 ---
 
-## 2. The proposed allocation
+## 2c. The big changes each member still has to make
+
+Not task lists — the shape of the work.
+
+### Esteban — Infrastructure
+
+1. **Run the Phase 4 apply chain (T052-T067).** Fifteen ordered steps: shared
+   egress, full-dev, full-prod, staging prerequisites, dev-owner trust, GitOps
+   bootstrap. This is the single unblocking action in the whole project.
+2. **Fix the publisher OIDC trust (inside T061/T062).** Today the role refuses
+   the service repositories' `main`, so no release or promotion PR can be
+   produced at all.
+3. **Finish the AWS dev foundation (ops-001, 23 tasks).** Backend tests, the
+   `gitops_handoff` output contract, Infracost wiring, and a checks workflow that
+   currently runs `terraform fmt` and nothing else.
+4. **Stand up the infrastructure half of the platform**: Istio and Kiali (T083)
+   — still entirely absent — plus Karpenter (T086), secret wiring (T089), and
+   the activation waves (T091).
+5. **Drive the live rollout** full-dev to staging to production (T093-T098).
+6. **Last: the AKS foundation and DNS** (T118-T134).
+
+### Juan Manuel — CI/CD and delivery
+
+1. **Build the five-service quality matrix** and pin every action by full SHA
+   (T099-T109). Every service workflow gains its complete blocking gate set.
+2. **Implement progressive delivery**: the 10/25/50/100 canary with fail-closed
+   p99 and error-rate AnalysisTemplates (T100, T110), then prove a deliberately
+   unhealthy canary aborts and a rollback restores (T111-T117).
+3. **Build the platform image mirror** (T082) — the OIDC workflow that copies
+   upstream images to ECR. Nothing in Phase 5 can reference a digest until it
+   runs.
+4. **Close the contract-testing gap**: the `frontend -> auth-api` pact and the
+   `auth-api <- frontend` and `users-api <- auth-api` provider verifications
+   (007 T011/T012), plus the four observed-verification tasks.
+5. **Harden the gates themselves**: path-scoped branch protection on production
+   overlays (003 T020), and the extended evidence validator and stage-gate
+   machinery (T142-T152).
+
+### Santiago — Observability and monitoring
+
+1. **Resolve the version drift first (E1).** Spec 006 pins four versions that
+   were never vendored, including Jaeger 1.65.0 against a shipped v2.20.0 — a
+   major version with a different architecture. Everything else in 006 sits on
+   top of that unresolved question.
+2. **Finish the observability foundation** (006, 23 tasks): saturation rules,
+   alert firing and resolution evidence, trace retrieval, log search and
+   trace-log correlation, and the Alertmanager routing commit.
+3. **Replace the economical substitutions with the full stack**: ECK,
+   Elasticsearch, Kibana, Logstash, and Filebeat (T084) in place of today's Loki
+   and Alloy; and the full-profile Prometheus, Grafana, Jaeger, and OTel
+   correlation (T085).
+4. **Instrument the workloads**: probes, resource bounds, PodDisruptionBudgets,
+   topology spread, ServiceMonitors, and KEDA ScaledObjects (T090), plus the
+   frontend and users-api health and telemetry contracts (T073/T076/T078/T081)
+   — the last two of five services still missing them.
+5. **Add the remaining monitoring surfaces**: Chaos Mesh and OpenCost (T087),
+   the Kyverno and Falco hardening (T088), continuous vulnerability assessment
+   (T146), and the cost dashboard (T147).
+6. **Last: run the DR game day** (T135-T141) and record continuity honestly —
+   what was observed, lost, duplicated, or diverged.
+
+### The dependency that matters more than the counts
+
+Roughly half of Juan Manuel's and Santiago's lanes cannot start until Esteban's
+apply chain lands. Both have real preparation work that does not need a live
+cluster — vendoring components, writing tests, wiring workflows — and that is
+what they should be doing while Phase 4 runs.
+
+---
+
+## 2. The proposed allocation (pre-decision, retained for context)
 
 Rebalanced by moving **whole coherent blocks**, never individual tasks, so each
 boundary stays something one person can own without coordinating every day.

@@ -252,12 +252,11 @@ before it can be called outstanding *or* dropped.
    defined inside spec 009 against the dev-owner root rather than as the module
    the plan listed. This may be a deliberate simplification, but it is not
    written down anywhere.
-5. **Whether the local GitOps pilot is still a target.** Spec 001 stopped on
-   2026-08-09 at 12/56 when work moved to EKS. Half its scripts exist; its
-   offline asset lock, three-clean-run harness, and first-time-operator
-   evaluation do not. No decision retires it, so by the rule above all 44
-   remaining tasks are outstanding — for a pilot the project has arguably moved
-   past. This needs an explicit decision either way.
+5. ~~**Whether the local GitOps pilot is still a target.**~~ **Resolved
+   2026-08-30**: retired by maintainer decision (`gitops#82`). The pilot served
+   its purpose; its 44 remaining tasks were the formal evidence harness, which
+   spec 009's evidence contract superseded. They stay unchecked because they were
+   not delivered.
 6. **The two undocumented documentation debts.** Spec 006 T049 and spec 008 T027
    both require `docs/platform-addons.md` to cover their components; it covers
    neither observability nor the security trio.
