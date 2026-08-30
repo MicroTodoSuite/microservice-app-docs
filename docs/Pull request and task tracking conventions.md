@@ -78,18 +78,34 @@ Never hand-write one.
 
 ## 3. Language
 
-**Everything written into a repository or a pull request is in English**:
-branch names, commit messages and bodies, pull-request titles and bodies,
-review comments, code comments, documentation, and specification text.
+**Repository artifacts are English. Pull-request bodies are bilingual.**
 
-This is not new — `AGENTS.md` has said "write all project artifacts in English"
-in every repository — but it was stated loosely enough to be read as covering
-only files. It covers the pull request too. A pull-request body is a project
-artifact: reviewers read it, it is the record of why a change was made, and on a
-squash merge it can become the commit message itself.
+| Artifact | Language |
+| --- | --- |
+| Branch names, commit messages and bodies | English |
+| Code comments, documentation, specification text | English |
+| Pull-request **title** | English — it is the squash-merge commit subject |
+| Pull-request **body** | **English and Spanish, both** |
+| Review comments | Either; match what the thread is already using |
 
-The exception is conversation that never lands in a repository. Talking through
-a change in Spanish is fine; writing it into the repository is not.
+The body carries two audiences at once. It is a project artifact a future
+reader has to be able to follow, and it is how this team — which works in
+Spanish — actually reviews each other's changes. Writing it only in English
+costs review quality; writing it only in Spanish leaves the record in a language
+the rest of the artifacts do not use.
+
+So write it twice. English section first, then a Spanish section under a
+`## Español` heading, with the same content — not a summary of it. If the two
+disagree, the English one governs, because it is the one that can become the
+commit message.
+
+This is a change from the rule first written on 2026-08-30, which required
+English only. It was corrected the same day after the practical cost became
+obvious.
+
+**Every contributor follows this, AI agents included.** An agent that opens a
+pull request writes both sections itself; it does not leave the Spanish half for
+someone else to fill in.
 
 ## 4. Pull request title
 
@@ -138,9 +154,14 @@ Rules that hold everywhere:
   named human unlocks a gate.
 - Squash-merge and delete the branch. The PR body survives as the merge commit
   message, which is why it has to be worth reading.
-- A red required check blocks the merge. A security finding is a team decision
-  recorded in its own reviewed change, never a suppression slipped into a
-  feature branch.
+- **A check that this change turned red blocks the merge.** A check that was
+  already failing on `main` for an unrelated reason does not — merging a
+  documentation change into a repository whose image scan was red yesterday
+  neither causes nor hides anything. State the pre-existing failure in the body
+  so the reviewer can see you knew about it. What is never acceptable is
+  merging past a check *your own change* broke.
+- A security finding is a team decision recorded in its own reviewed change,
+  never a suppression slipped into a feature branch.
 
 ## 7. Task tracking — the traceability rule
 
