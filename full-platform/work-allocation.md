@@ -148,6 +148,60 @@ apply chain lands. Both have real preparation work that does not need a live
 cluster — vendoring components, writing tests, wiring workflows — and that is
 what they should be doing while Phase 4 runs.
 
+## 2d. Reassessment: counting tasks was the wrong measure
+
+The 61 / 54 / 53 split above is **not** as even as it looks. Two corrections.
+
+### Tasks are not the same size
+
+Weighting each task by the artifacts it names — a rough but honest proxy, since
+a task naming five components is five components of work — changes the picture:
+
+| Member | Tasks | Share | Weight | Share | Weight per task |
+| --- | --- | --- | --- | --- | --- |
+| Esteban | 78 | 40 % | 436 | **51 %** | 5.6 |
+| Juan Manuel | 54 | 28 % | 220 | 26 % | 4.1 |
+| Santiago | 60 | 31 % | 202 | 23 % | 3.4 |
+
+Counting tasks understates infrastructure by eleven points. Spec 009's Phase 5
+bundles several components into one checkbox — T083 is "AWS Load Balancer
+Controller **and** Istio **and** Kiali" in a single task, T084 is ECK plus
+Elasticsearch, Kibana, Logstash, and Filebeat. A register with coarse tasks
+looks lighter than it is.
+
+### The real bottleneck is not the count, it is the bundling
+
+Of the 78 tasks in the infrastructure lane, **only 28 actually require Esteban**:
+live cloud reads, refreshed plans, state backups, exact-plan approval, bootstrap
+mutations, and live verification. The other **50 are pure authoring** — Terraform
+module code, mocked tests, contract checks, documentation — that need no cluster
+and no approval, and could be written by anyone.
+
+That bundling is what makes infrastructure a single point of failure. Everyone
+else is blocked behind the apply chain, and the person who has to run it is also
+carrying fifty tasks of authoring that have nothing to do with it.
+
+### What would actually be more equitable
+
+1. **Split the infrastructure lane by kind, not by subject.** Esteban keeps the
+   28 cloud-operation tasks — the apply chain, the live rollout, the bootstraps.
+   The 50 authoring tasks are distributed by capacity, not by area. Most of
+   ops-001's remainder (backend tests, the `gitops_handoff` contract, the checks
+   workflow, Infracost wiring) is test-and-workflow work that sits closer to
+   CI/CD anyway.
+2. **Move component vendoring off the critical path.** T083 is manifest
+   authoring; only its apply needs Esteban. The same holds for T086 and T089.
+3. **Do not measure this in task counts again.** Measure it in weight, and check
+   who is blocking whom.
+
+Applying (1) and (2) leaves roughly: Esteban 28 cloud operations plus review of
+everything that touches infrastructure; Juan Manuel and Santiago absorbing the
+authoring across their existing lanes. That is more even in effort and, more
+importantly, it stops one person's calendar from gating the entire project.
+
+**Recommendation**: the 61 / 54 / 53 split is defensible as a subject-matter map
+and should not be used as a workload plan. Use §2d.
+
 ---
 
 ## 2. The proposed allocation (pre-decision, retained for context)
