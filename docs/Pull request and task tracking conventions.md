@@ -78,34 +78,24 @@ Never hand-write one.
 
 ## 3. Language
 
-**Repository artifacts are English. Pull-request bodies are bilingual.**
+**Everything is in English.** Branch names, commit messages and bodies,
+pull-request titles and bodies, review comments, code comments, documentation,
+and specification text. No exceptions and no bilingual sections.
 
-| Artifact | Language |
-| --- | --- |
-| Branch names, commit messages and bodies | English |
-| Code comments, documentation, specification text | English |
-| Pull-request **title** | English — it is the squash-merge commit subject |
-| Pull-request **body** | **English and Spanish, both** |
-| Review comments | Either; match what the thread is already using |
+`AGENTS.md` has always said "write all project artifacts in English"; this
+states plainly that a pull request is one. A pull-request body is a project
+artifact: reviewers read it, it is the record of why a change was made, and on a
+squash merge it can become the commit message itself.
 
-The body carries two audiences at once. It is a project artifact a future
-reader has to be able to follow, and it is how this team — which works in
-Spanish — actually reviews each other's changes. Writing it only in English
-costs review quality; writing it only in Spanish leaves the record in a language
-the rest of the artifacts do not use.
+Conversation that never lands in a repository is not restricted. Discussing a
+change in another language is fine; writing it into the repository is not.
 
-So write it twice. English section first, then a Spanish section under a
-`## Español` heading, with the same content — not a summary of it. If the two
-disagree, the English one governs, because it is the one that can become the
-commit message.
-
-This is a change from the rule first written on 2026-08-30, which required
-English only. It was corrected the same day after the practical cost became
-obvious.
-
-**Every contributor follows this, AI agents included.** An agent that opens a
-pull request writes both sections itself; it does not leave the Spanish half for
-someone else to fill in.
+**Changing this rule takes a recorded decision**, not a remark in conversation.
+It was briefly amended to require bilingual bodies on 2026-08-30 and reverted
+the same day, because the amendment was made from an ambiguous message rather
+than from a decision anyone had actually taken. Anyone — person or agent — who
+believes the rule should change opens a pull request against this document and
+says why.
 
 ## 4. Pull request title
 
