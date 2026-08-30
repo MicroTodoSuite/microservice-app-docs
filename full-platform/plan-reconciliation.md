@@ -231,8 +231,9 @@ tasks are genuinely outstanding.
 | ops 001-aws-dev-foundation | 30/53 | 30/53 | **Accurate.** Spot-checked: T031 is partial (outputs lack the approved backend policy ARN), T046 is partial (the workflow runs `terraform fmt` only, not ShellCheck/Trivy/Infracost), T025-T027 and T039-T042 reference test files that do not exist. |
 | ops 002-full-profile-demo | 0/0 | 0/0 | No task register |
 
-**Totals**: 590 tasks across twelve specs — 327 delivered before this
-reconciliation, **333 after**. Spec 009's 162 was never the whole plan.
+**Totals**: 590 tasks across twelve specs. **327 delivered on `main` today**;
+**354 once the reconciliation lands** (gitops#80 ticks 27, verified from its
+diff). That leaves **236 outstanding**. Spec 009's 162 was never the whole plan.
 
 ## Part C — Missing by definition
 
