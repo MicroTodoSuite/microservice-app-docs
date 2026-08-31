@@ -171,11 +171,20 @@ looks lighter than it is.
 
 ### The real bottleneck is not the count, it is the bundling
 
-Of the 78 tasks in the infrastructure lane, **only 28 actually require Esteban**:
+Of the 78 tasks in the infrastructure lane, **44 actually require Esteban**:
 live cloud reads, refreshed plans, state backups, exact-plan approval, bootstrap
-mutations, and live verification. The other **50 are pure authoring** — Terraform
-module code, mocked tests, contract checks, documentation — that need no cluster
-and no approval, and could be written by anyone.
+mutations, merges through protected branches, and live verification. The other
+**34 are authoring** — Terraform module code, mocked tests, contract checks,
+vendored manifests, documentation — that need no cluster and no approval, and
+could be written by anyone.
+
+> **Corrected 2026-08-30.** This first read 28 / 50. That split was produced by
+> a keyword pass that missed operational verbs — "execute exactly", "open five
+> PRs", "run and fix", "verify each" — and so counted operating tasks as
+> authoring. The twenty ambiguous cases were then judged individually. The
+> corrected figure is 44 / 34, and it changes the conclusion's size though not
+> its direction: there is real authoring to move off the critical path, but it
+> is a third of the lane, not two-thirds.
 
 That bundling is what makes infrastructure a single point of failure. Everyone
 else is blocked behind the apply chain, and the person who has to run it is also
@@ -194,10 +203,12 @@ carrying fifty tasks of authoring that have nothing to do with it.
 3. **Do not measure this in task counts again.** Measure it in weight, and check
    who is blocking whom.
 
-Applying (1) and (2) leaves roughly: Esteban 28 cloud operations plus review of
-everything that touches infrastructure; Juan Manuel and Santiago absorbing the
-authoring across their existing lanes. That is more even in effort and, more
-importantly, it stops one person's calendar from gating the entire project.
+Applying (1) and (2) leaves roughly: Esteban 44 cloud operations plus review of
+everything that touches infrastructure; Juan Manuel and Santiago absorbing 34
+authoring tasks across their existing lanes. That does not equalise the lanes —
+infrastructure still carries the most, and most of what it carries genuinely
+needs the infrastructure owner. What it does is stop one person's calendar from
+gating work that never needed them in the first place.
 
 **Recommendation**: the 61 / 54 / 53 split is defensible as a subject-matter map
 and should not be used as a workload plan. Use §2d.
