@@ -1,18 +1,185 @@
 # Work Allocation
 
-**Date**: 2026-08-30
-**Basis**: the tasks outstanding once `gitops#80` lands, classified from
-`full-platform/plan-reconciliation.md`.
+**Date**: 2026-09-07
+**Basis**: every `tasks.md` register in `microservice-app-gitops` and
+`microservice-app-ops`, counted on 2026-09-07 including the account-recovery
+work not yet on `main`, classified from `full-platform/plan-reconciliation.md`.
 
-> **Updated 2026-08-30 after two maintainer decisions.** The local GitOps pilot
-> is retired (`gitops#82`), removing 44 tasks. The Azure DR leg is sequenced
-> last, confirming `architecture-review.md` §7 step 10. With both applied the
-> near-term split is **61 / 54 / 53** — see §2b.
+> **Sections 1 through 2d are the 2026-08-30 revision.** They are kept for the
+> reasoning they record, not for their numbers. Three things changed since:
+> the AWS account was replaced, thirteen recovery tasks were added, and the
+> service operational contracts landed. **Section 0 is the current balance and
+> the current allocation.**
 
 The team split the project three ways at the start — infrastructure, CI/CD,
 observability and monitoring. This document answers two questions with data
 rather than impression: how even that split turned out, and how the remaining
 work divides so each member has a boundary they can act on alone.
+
+---
+
+## 0. Balance and allocation, 2026-09-07
+
+### 0.1 Every register, counted
+
+| Repo / spec | Done | Total | Outstanding |
+| --- | --- | --- | --- |
+| gitops `001-local-gitops-pilot` | 12 | 56 | *(44 — retired by `gitops#82`, out of scope)* |
+| gitops `002-dual-topology-plumbing` | 18 | 18 | 0 |
+| gitops `003-platform-addons` | 30 | 30 | 0 |
+| gitops `003-reusable-cicd-delivery` | 32 | 38 | 6 |
+| gitops `004-service-onboarding` | 34 | 34 | 0 |
+| gitops `005-namespace-isolation` | 81 | 95 | 14 |
+| gitops `006-observability-platform-foundation` | 27 | 50 | 23 |
+| gitops `007-advanced-testing` | 21 | 27 | 6 |
+| gitops `008-security-runtime-hardening` | 19 | 27 | 8 |
+| gitops `009-full-platform-rollout` | 57 | 166 | 109 |
+| ops `001-aws-dev-foundation` | 38 | 62 | 24 |
+| ops `002-full-profile-demo` | 22 | 22 | 0 |
+| **Total** | **391** | **625** | **234 unchecked — 190 in scope** |
+
+Two qualifications on those numbers:
+
+- **Thirteen of the tasks are not on `main` yet.** ops `001` T054–T062 and
+  gitops `009` T163–T166 were written on 2026-09-07 for the account recovery
+  and live on `chore/migrate-aws-account-575172595729` in both repositories.
+- **Four more close on review.** gitops PR #85 ticks 009 T073, T076, T078 and
+  T081 against the frontend and users-api contracts merged on 2026-08-31. Its
+  three checks are green and it is waiting for a reviewer, not for work. With
+  it merged the in-scope figure is **186**.
+
+### 0.2 What changed since the 2026-08-30 revision
+
+1. **The AWS account was replaced.** `916491575487` is retired. The economical
+   dev backend and foundation now live in `575172595729`, applied from
+   inspected saved plans (ops `001` T054–T059, T061–T062). The prior state is
+   kept as an external recovery backup and is not migrated.
+2. **The GitOps side of that recovery is unfinished.** gitops `009` T164 is in
+   the working tree — 66 files repointing the active economical ECR and IRSA
+   values — and T165 (republish and promote the five digests) and T166 (merge,
+   bootstrap, verify) are untouched.
+3. **The service operational contracts landed** for frontend and users-api,
+   which were the last two of five.
+4. **CVE-2026-14456 is remediated** in frontend and todos-api. It no longer
+   blocks anything.
+5. **The release path is still completely blocked, now for a new reason.** All
+   five service repositories still name the retired account in
+   `.github/workflows/ci.yml`, for both `ecr-repository` and
+   `publisher-role-arn`. `ci / supply-chain` fails at *Configure AWS
+   credentials through GitHub OIDC*, and `release` plus all four `promote` jobs
+   are skipped — observed on the todos-api `main` run 33467052223 and the
+   users-api `main` run of 2026-08-31. No release, no digest, no promotion PR
+   can be produced until those five files change.
+
+### 0.3 Recorded decision — the infrastructure lane stays whole
+
+**Maintainer decision, recorded 2026-09-07.** Esteban Gaviria keeps the whole
+infrastructure lane, allocated by subject matter, rather than the 44-operate /
+34-author division §2d recommends.
+
+§2d is retained as analysis and its measurement stands — infrastructure carries
+the most weight per task, and a third of the lane is authoring that needs no
+cluster. It is no longer a proposal.
+
+### 0.4 The allocation
+
+| Member | Area | Tasks | Share |
+| --- | --- | --- | --- |
+| Esteban Gaviria | Infrastructure | **82** | 43 % |
+| Santiago Valencia | Observability and monitoring | **60** | 32 % |
+| Juan Manuel Díaz | CI/CD and delivery | **48** | 25 % |
+| | | **190** | |
+
+Santiago's figure becomes 56 when gitops PR #85 merges.
+
+#### Esteban Gaviria — Infrastructure, 82 tasks
+
+| Register | N | Tasks |
+| --- | --- | --- |
+| gitops `009-full-platform-rollout` | 52 | T052–T071, T083, T086, T089, T091, T093–T098, T118–T134, T154, T156, T164–T166 |
+| ops `001-aws-dev-foundation` | 24 | T025–T028, T030–T031, T035–T036, T038–T050, T052–T053, T060 |
+| gitops `005-namespace-isolation` | 6 | T042–T043, T068, T075, T092, T095 |
+
+#### Santiago Valencia — Observability and monitoring, 60 tasks
+
+| Register | N | Tasks |
+| --- | --- | --- |
+| gitops `006-observability-platform-foundation` | 23 | T003–T007, T009–T010, T014a, T021–T022, T024–T026, T030–T031, T038–T039, T044–T049 |
+| gitops `009-full-platform-rollout` | 21 | T073, T076, T078, T081, T084–T085, T087–T088, T090, T135–T141, T143–T144, T146–T147, T158 |
+| gitops `005-namespace-isolation` | 8 | T064–T065, T069, T072, T079, T082, T089–T090 |
+| gitops `008-security-runtime-hardening` | 8 | T003–T004, T013, T018, T023, T025–T027 |
+
+#### Juan Manuel Díaz — CI/CD and delivery, 48 tasks
+
+| Register | N | Tasks |
+| --- | --- | --- |
+| gitops `009-full-platform-rollout` | 36 | T038, T082, T092, T099–T117, T142, T145, T148–T153, T155, T157, T159–T162 |
+| gitops `003-reusable-cicd-delivery` | 6 | T020–T021, T024, T029, T035, T038 |
+| gitops `007-advanced-testing` | 6 | T011–T013, T018, T026–T027 |
+
+### 0.5 The order the work has to happen in
+
+**Gate 0 — restore the economical platform in the new account.** Five items,
+all Esteban's, and nothing else in the project runs until they land:
+
+1. gitops `009` T164 — commit the 66-file account repoint currently uncommitted.
+2. The five service `ci.yml` files — see §0.7, this is the release-path unblock.
+3. gitops `009` T165 — publish the five images through the OIDC release path
+   into the replacement ECR repositories and promote their exact digests.
+4. ops `001` T060 and gitops `009` T166 — merge through protected `main`, run
+   `scripts/managed/bootstrap-cluster.sh` for `microtodosuite-dev`, and verify
+   ArgoCD, External Secrets, workloads, and cross-service behavior read-only.
+
+Everything in gitops `005`, `006` and `008` that is still open is live
+observation on that cluster. Gate 0 is what unblocks Santiago, not Phase 4.
+
+**Gate 1 — the Phase 4 apply chain** (gitops `009` T052–T067). Fifteen ordered
+steps: shared egress, full dev, full prod, staging prerequisites, dev-owner
+trust, GitOps bootstrap. Everything in US3, US4 and US5 depends on it, and
+T061/T062 inside it is where the full-profile publisher trust is fixed.
+
+**Gate 2 — the rest**, in each member's lane, with the Azure DR leg last.
+
+### 0.6 What each member can do today, without waiting
+
+**Santiago**, before the cluster returns:
+
+- Resolve E1 first — spec `006` T004–T007 pin kube-prometheus v0.16.0, Grafana
+  11.7.0, Loki 3.6.0 and Jaeger 1.65.0 against v0.18.0, v13.2.0, v3.7.6 and
+  **v2.20.0** vendored. Jaeger is a major-version jump. That is a maintainer
+  decision, not an edit, and everything else in `006` sits on top of it.
+- Author, no cluster needed: `006` T014a saturation rules and T022 PromQL
+  assertions; `008` T003–T004; `009` T084–T085, T087–T088, T090 manifests; and
+  the two documentation debts, `006` T049 and `008` T027.
+
+**Juan Manuel**, before Gate 1:
+
+- `007` T011–T012 — the `frontend → auth-api` pact and the two provider
+  verifications. One pact of three exists.
+- `009` T082 mirror workflow, T099–T110 — matrix and workflow contract tests,
+  the SHA pinning pass, canary render tests, and the fail-closed
+  AnalysisTemplates.
+- `009` T142, T145, T148–T149 — evidence fixtures, validator extension,
+  read-only collection.
+- `003-reusable-cicd-delivery` T020, T029.
+
+### 0.7 Work no register covers
+
+The five service repositories' `.github/workflows/ci.yml` each hard-code
+`916491575487` in `ecr-repository` and `publisher-role-arn`
+(auth-api, todos-api, users-api, frontend, log-message-processor — one file
+each). gitops `009` T165 assumes the release path works; it does not name this
+edit, and no other task does either.
+
+Rule 5 of §7 of the conventions makes this need a task before it is done. The cheapest
+correct fix is to extend T165's text to name the five workflow inputs, in the
+same pull request that performs the repoint.
+
+### 0.8 Not distributable
+
+Seven acceptance tasks — gitops `009` T038, T067, T098, T117, T141, T152, T162
+— are maintainer signatures, not work. They are counted above under whoever
+owns the surrounding stage, but no member closes their own.
 
 ---
 
@@ -50,6 +217,8 @@ subject matter, the 236 outstanding tasks fall 137 infrastructure (58 %), 58
 CI/CD (25 %), 41 observability (17 %).
 
 ## 2b. After the two decisions — the working numbers
+
+> Superseded by §0.4. Retained for the sequencing argument below.
 
 **192 tasks remain**, of which 24 are the deferred Azure leg.
 
@@ -212,6 +381,9 @@ gating work that never needed them in the first place.
 
 **Recommendation**: the 61 / 54 / 53 split is defensible as a subject-matter map
 and should not be used as a workload plan. Use §2d.
+
+> **Not adopted.** The maintainer chose to keep the subject-matter lane whole;
+> see §0.3. The measurement above still holds — it is the plan that changed.
 
 ---
 

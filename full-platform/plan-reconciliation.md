@@ -235,6 +235,14 @@ tasks are genuinely outstanding.
 **354 once the reconciliation lands** (gitops#80 ticks 27, verified from its
 diff). That leaves **236 outstanding**. Spec 009's 162 was never the whole plan.
 
+> **Recounted 2026-09-07.** The registers now hold **625 tasks**, **391 done**,
+> **234 unchecked** — **190 in scope** once spec 001's 44 retired tasks come
+> out. The growth is thirteen account-recovery tasks (ops `001` T054–T062,
+> gitops `009` T163–T166) written on 2026-09-07 and not yet on `main`; the
+> progress is the frontend and users-api operational contracts, plus the
+> recovery tasks already executed. The per-member allocation built on this
+> count is `full-platform/work-allocation.md` §0.
+
 ## Part C — Missing by definition
 
 Nothing defines these, and no decision descopes them. Each needs a decision
@@ -317,6 +325,14 @@ and no promotion PR can be produced today.** The subject condition on the shared
 publisher role does not cover these repositories' `main`. Spec 009 T061/T062
 update that trust policy, which places the fix inside the blocked Phase 4 chain.
 
+> **Still true on 2026-09-07, and now for a second reason.** The five service
+> repositories' `.github/workflows/ci.yml` name the retired account
+> `916491575487` in both `ecr-repository` and `publisher-role-arn`, so
+> `ci / supply-chain` fails at *Configure AWS credentials through GitHub OIDC*
+> before the trust policy is ever consulted (todos-api `main` run
+> 33467052223). That edit is the release-path unblock and no task names it —
+> see E4.
+
 ### E3 — Ten promotion PRs were withdrawn
 
 `#64`-`#73` were closed on 2026-08-30. `bump-image.sh` promoted through
@@ -324,6 +340,27 @@ update that trust policy, which places the fix inside the blocked Phase 4 chain.
 the comment block inside the embedded `patch:` literal on every run (measured:
 10 -> 13 -> 16 -> 19 comment lines over three promotions). Repaired in gitops
 PR #79.
+
+### E4 — The AWS account was replaced, and five workflows still point at the old one
+
+Recorded 2026-09-07. Account `916491575487` is retired; the economical dev
+backend and foundation were rebuilt in `575172595729` from inspected saved plans
+(ops `001` Phase 8, `specs/001-aws-dev-foundation/plan.md` addendum). The prior
+state is preserved externally as recovery evidence and is not migrated.
+
+What is not finished, and blocks everything else:
+
+| Item | Where | State |
+| --- | --- | --- |
+| Active economical ECR and IRSA values | gitops `009` T164 | Uncommitted working tree, 66 files |
+| Service workflow account inputs | five service repos, `.github/workflows/ci.yml` | **No task covers this** |
+| Republish and promote the five digests | gitops `009` T165 | Not started |
+| Merge, bootstrap, verify | ops `001` T060, gitops `009` T166 | Not started |
+
+The middle row is the gap. T165 assumes a working release path; the five
+workflow files are what make it work, and rule 5 of §7 of the conventions says
+that work needs a task before it is done — either by extending T165's text or by
+adding one.
 
 ---
 
