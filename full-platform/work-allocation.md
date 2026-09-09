@@ -119,6 +119,12 @@ Santiago's figure becomes 56 when gitops PR #85 merges.
 
 ### 0.5 The order the work has to happen in
 
+> The infrastructure lane is planned task by task in
+> `full-platform/infrastructure-execution-plan.md` (2026-09-09), which also
+> records three blockers this section does not cover: spec 009 still names the
+> retired account, `demo-full` did not survive the account change, and the full
+> profile does not fit the account's current quotas.
+
 **Gate 0 — restore the economical platform in the new account.** Five items,
 all Esteban's, and nothing else in the project runs until they land:
 
