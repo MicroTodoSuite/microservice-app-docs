@@ -297,6 +297,11 @@ there:
 | `microservice-app-gitops` | `config/aws-account.env` | the same two contracts, in `validate-gitops` |
 | Five services and the reusable workflow | organization variable `AWS_ACCOUNT_ID` | each repository's CI contract |
 
+Implemented in `microservice-app-ops#33`, `microservice-app-gitops#88`,
+`.github#13`, and the five services — `auth-api#23`, `todos-api#19`,
+`users-api#24`, `frontend#24`, `log-message-processor#20`. The six workflow
+changes wait on the organization variable.
+
 Moving to another account is then:
 
 ```bash
