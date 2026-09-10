@@ -345,6 +345,13 @@ each needing a backup and an approval.
 
 ## 4. Decisions needed, and when
 
+> **Updated 2026-09-10** in `full-platform/capacity-and-regions.md`: decision 4 is
+> answered (an Azure for Students subscription, six vCPUs per region); decision 3
+> is replaced by the limits L1–L6, which fit both profiles at once by putting
+> `full-prod` in a second region; and two decisions are added — the region layout
+> (6) and economical cold DR (7). §5's recommendation is implemented: the account
+> is declared once per repository and moved with `scripts/set-aws-account.sh`.
+
 | # | Decision | Needed before | Owner |
 | --- | --- | --- | --- |
 | 1 | Amend spec 009's account, and how to handle the two false ticks (T040/T041) | Block D | Maintainer |
