@@ -1,5 +1,21 @@
 <!--
 Sync Impact Report
+- Version change: 3.1.0 -> 4.0.0 (MAJOR: principle 12 is redefined)
+- Modified principles:
+  - 12. Proven Disaster Recovery and Disclosed Data Loss: Azure becomes an independent
+    recovery domain with active-passive failover; latency-based active-active is gated on
+    a replicated data store. Basis: `docs/ADR-0001 Multicloud strategy.md`.
+- Modified sections:
+  - Cost-optimized profile: a maintainer-approved rebuild under new resource names is
+    permitted and is not a retirement (maintainer decision G3, 2026-09-11); optional
+    cold DR moves to an off-provider store.
+  - Authorized full-profile rollout: failover routing replaces active-active routing as
+    the gated production traffic mode.
+- Affected repositories: microservice-app-ops (spec 004 rebuild), microservice-app-gitops
+  (spec 009 user story 5 and the non-retirement boundary, FR-003), microservice-app-docs.
+- Follow-up TODOs: amend spec 009 FR-003 and user story 5 in a gitops pull request.
+
+Prior report (3.1.0), retained for auditability:
 - Version change: 3.0.0 -> 3.1.0
 - Added principles:
   - 13. Traceable Delivery: pull-request format and task-record obligations become binding.
@@ -26,7 +42,7 @@ Prior report (3.0.0), retained for auditability:
 
 # MicroTodoSuite Constitution
 
-Version: 3.1.0
+Version: 4.0.0
 
 Ratified: 2026-08-10
 
@@ -112,12 +128,19 @@ its declared identity, transport, admission, and runtime controls must also work
 
 ### 12. Proven Disaster Recovery and Disclosed Data Loss
 
-**Prove disaster recovery and disclose data loss.** The full profile MUST use AWS EKS as
-primary and Azure AKS as a synchronized active-active target routed by Route 53. The same
-immutable production digest MUST run in both destinations. Health-based routing and Chaos
-Mesh game days MUST prove failover before real traffic is enabled, and Redis plus business
-data continuity limits MUST remain explicit until durable replication exists — Rationale:
-an untested failover path or hidden state loss is not disaster recovery.
+**Prove disaster recovery and disclose data loss.** The full profile MUST use AWS as its
+single primary platform and Azure as an independent recovery domain. Azure MUST hold a
+warm-standby production destination reconciled by its own ArgoCD root and running the
+same immutable production digest, and MUST hold off-provider recovery copies —
+Terraform state replicas, cluster backups, and the production image mirror — so that the
+loss of the AWS region or of the AWS account is recoverable. Production traffic MUST
+reach Azure only through health-checked failover (active-passive). Latency-based
+active-active routing MUST NOT be enabled until a replicated data store makes a user's
+requests consistent across clouds. Chaos Mesh game days MUST prove failover before real
+traffic is enabled, and Redis plus business data continuity limits MUST remain explicit
+until durable replication exists — Rationale: an untested failover path or hidden state
+loss is not disaster recovery, and routing users across two independent in-memory data
+sets is not availability.
 
 ### 13. Traceable Delivery
 
@@ -152,15 +175,21 @@ the full profile is built and validated in parallel.
   replica-based traffic shifting rather than Istio percentage routing.
 - No Azure AKS disaster-recovery target is provisioned under this profile;
   resilience relies on multi-AZ placement within the single cluster, with
-  optional cold DR via Velero snapshots to S3.
+  optional cold DR via Velero backups to an off-provider store in Azure, so that
+  a lost AWS account does not take the backups with it.
 - Node capacity SHOULD favor Spot instances for cost, reserving On-Demand
   capacity for evidence-gathering windows or genuinely stateful workloads.
 
 This trades weaker workload isolation for materially lower cost. It is a deliberate,
 informed trade-off, not an oversight. Its cluster, workloads, and GitOps ownership MUST
-remain operational throughout the full-profile rollout. Retirement or production cutover
-requires a separate approved decision with rollback evidence; the rollout itself grants
-no authority to destroy or repurpose the economical environment.
+remain operational throughout the full-profile rollout, except during an approved rebuild
+window. Retirement or production cutover requires a separate approved decision with
+rollback evidence; the rollout itself grants no authority to destroy or repurpose the
+economical environment. A rebuild is not a retirement: destroying and recreating the
+economical environment under new resource names is permitted when the maintainer
+approves a rebuild plan that preserves every persistent and sensitive item, applies only
+reviewed saved plans, and validates the recreated platform before the window closes
+(maintainer decision G3, 2026-09-11; ops spec 004).
 
 Workload activation under this profile requires namespace isolation, GitOps-only reconciliation, immutable test/scan/SBOM/signature evidence, Kyverno admission, External Secrets and IRSA where applicable, explicit probes, native production canaries, and live acceptance evidence. Capability-gated controls above MUST have a versioned follow-up spec and owner before they are claimed; their documented absence is neither an implicit pass nor a blocker for an unrelated release.
 
@@ -179,9 +208,10 @@ delivery target. Its implementation MUST satisfy all of the following boundaries
   Kyverno, Argo Rollouts, Prometheus, Grafana, Jaeger, ELK/Filebeat, Alertmanager, Falco,
   Chaos Mesh, OpenCost, and the declared audit jobs. A capability is complete only after
   its live behavior and failure mode are verified.
-- Route 53 active-active routing, production traffic, and destructive cutover remain
+- Route 53 failover routing, production traffic, and destructive cutover remain
   disabled until ingress TLS, health checks, canary rollback, cross-cloud consistency,
-  and an approved failover game day all pass.
+  and an approved failover game day all pass. Latency-based active-active routing
+  additionally requires a replicated data store (principle 12).
 - Account-level singletons remain single-owner resources. Additional clusters consume
   them through explicit multi-cluster trust or cluster-local identities without creating
   duplicate repositories, providers, or globally named roles.
@@ -235,4 +265,4 @@ Status meanings: **HONORED** = concrete implementation exists; **PARTIAL** = som
 
 This constitution outranks feature specifications; approved feature specifications outrank plans and tasks; all of them outrank current code and deployed state. A conflicting feature specification MUST be changed to comply or blocked until a constitution amendment is approved first. Existing contradictory code creates remediation work and never establishes precedent or an implicit waiver. Ambiguity is resolved in a documented pull-request decision by the same maintainers required for an amendment, and no conversation, prompt, emergency command, or undocumented exception may override that decision hierarchy.
 
-**Version**: 3.1.0 | **Ratified**: 2026-08-10 | **Last Amended**: 2026-08-30
+**Version**: 4.0.0 | **Ratified**: 2026-08-10 | **Last Amended**: 2026-09-11
