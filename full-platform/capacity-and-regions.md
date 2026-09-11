@@ -2,6 +2,7 @@
 
 **Date**: 2026-09-10
 **Status**: proposal. Every item marked *Decision* is the maintainer's to take.
+**Corrected**: 2026-09-11 — §3's `us-east-2` figures were unverified and wrong; §4's region proposal is superseded by ADR-0001.
 **Relates to**: `full-platform/infrastructure-execution-plan.md` §1 and §4.
 
 This document answers four questions raised after the execution plan:
@@ -174,17 +175,17 @@ hub; `us-east-2` holds `full-prod`. Every axis keeps headroom, and the
 On-Demand headroom matters most: a rolling node replacement briefly doubles a
 node group.
 
-**Not yet verified**: that `us-east-2` in this account has the same default
-quotas, and that it offers `m7i-flex.large`. New accounts do not always get
-identical regional defaults. Check both before deciding:
+**Verified on 2026-09-11, and it changes the proposal.** `us-east-2` in this
+account allows **5** standard On-Demand vCPUs, **5** Spot vCPUs, 5 Elastic IPs,
+and 5 VPCs; `m7i-flex.large` is offered in all three zones. The earlier text
+assumed `us-east-1`'s 16 On-Demand vCPUs and marked that as unverified; it was
+wrong. `fprd` in `us-east-2` would have fitted its single bootstrap node but not
+an 8-vCPU Karpenter ceiling.
 
-```bash
-aws service-quotas get-service-quota --region us-east-2 --service-code ec2 --quota-code L-1216C47A
-aws service-quotas get-service-quota --region us-east-2 --service-code ec2 --quota-code L-0263D0A3
-aws service-quotas get-service-quota --region us-east-2 --service-code vpc --quota-code L-F678F1CE
-aws ec2 describe-instance-type-offerings --region us-east-2 --location-type availability-zone \
-  --filters Name=instance-type,Values=m7i-flex.large
-```
+`docs/ADR-0001 Multicloud strategy.md` withdraws the `us-east-2` placement: with
+Azure as the production recovery domain, `fprd` stays in `us-east-1` as a
+transit spoke. After L1 deletes the default VPC, `us-east-1` then holds five VPCs
+of five, four Elastic IPs of five, and 10 On-Demand vCPUs of 16.
 
 ### What the peak costs
 
