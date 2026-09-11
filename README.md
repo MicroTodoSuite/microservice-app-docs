@@ -1,39 +1,44 @@
-# 📚 **MicroTodoSuite** – Repositorio de Documentación
+# MicroTodoSuite Documentation
 
-Este repositorio centraliza toda la documentación relevante para el diseño, despliegue y mantenimiento de la aplicación **MicroTodoSuite**, una solución basada en microservicios enfocada en el despliegue en la nube (Azure).
+This repository holds the governing documents of MicroTodoSuite: the
+constitution, the architecture and delivery decisions, and the plans for the
+full-platform rollout. GaCode Solutions designs, builds, and operates the
+platform for its client, Lexfield Legal. The repository contains no executable
+code.
 
-## 🗂️ Estructura del Repositorio
+## Governing documents
 
-```bash
-microservice-app-docs/
-├── docs/
-│   ├── assets/                    # Diagramas e imágenes de soporte
-│   ├── Agile methodology.md       # Metodología ágil adoptada en el proyecto
-│   ├── Architecture diagrams.md   # Diagramas de arquitectura de nube
-│   ├── Branching strategies.md    # Estrategias de control de versiones
-│   ├── Pull request and task tracking conventions.md  # Convenciones vinculantes de PR y trazabilidad
-│   └── Report.md                  # Informe técnico del proyecto
-└── README.md                      # Este archivo
-```
+| Document | Purpose |
+| --- | --- |
+| [Constitution](constitution.md) | The non-negotiable principles, the operational baseline, and the amendment process. |
+| [Pull request and task tracking conventions](docs/Pull%20request%20and%20task%20tracking%20conventions.md) | The binding branch, commit, pull-request, language, and task-tracking rules. Constitution principle 13 makes them mandatory. |
+| [ADR-0001: Multicloud strategy](docs/ADR-0001%20Multicloud%20strategy.md) | Why AWS is the single primary platform and Azure an independent recovery domain. |
+| [Governance and IaC standards program](docs/Governance%20and%20IaC%20standards%20program.md) | The 2026 governance and infrastructure-as-code program and its recorded decisions. |
 
-## 🔍 Contenido Disponible
+## Architecture and delivery
 
-1. **Metodología Ágil**  
-   Descripción de la metodología ágil seleccionada para el proyecto.
-   📄 [Ver archivo](./docs/Agile%20methodology.md)
+| Document | Purpose |
+| --- | --- |
+| [Architecture](docs/Architecture%20diagrams.md) | The current platform architecture and the retired Azure Container Apps design. |
+| [Branching strategy](docs/Branching%20strategies.md) | The branching model used by every repository. |
+| [Agile methodology](docs/Agile%20methodology.md) | The Kanban method and the delivery board. |
+| [Evolution plan](docs/MicroTodoSuite%20evolution%20plan.md) | The consolidated plan for the migration from Azure Container Apps to AWS EKS, with the economical and full profiles. |
+| [Architecture review](architecture-review.md) | The 2026-08-09 review of the target architecture against the validated workspace state. |
 
-2. **Estrategias de Branching**  
-   Descripción de las convenciones utilizadas para la gestión del control de versiones en los distintos repositorios del proyecto.
-   📄 [Ver archivo](./docs/Branching%20strategies.md)
+## Full-platform rollout
 
-3. **Diagramas de Arquitectura**  
-   Representaciones visuales de la arquitectura de nube.
-   📄 [Ver archivo](./docs/Architecture%20diagrams.md)
+| Document | Purpose |
+| --- | --- |
+| [Rollout index](full-platform/rollout-index.md) | The stages of the full-platform rollout, their owners, and their order. |
+| [Infrastructure execution plan](full-platform/infrastructure-execution-plan.md) | The sequencing of the infrastructure lane. |
+| [Capacity, regions, and the account parameter](full-platform/capacity-and-regions.md) | The limits that let both profiles run at once in one account, and the region placement. |
+| [Economical safety boundary](full-platform/economical-safety-boundary.md) | What protects the economical platform while the full profile is built. |
+| [Plan reconciliation](full-platform/plan-reconciliation.md) | The task registers reconciled against delivered reality. |
+| [Work allocation](full-platform/work-allocation.md) | The remaining work distributed across the team lanes. |
 
-4. **Convenciones de Pull Request y trazabilidad de tareas**  
-   Reglas vinculantes de formato de rama, commit y PR, y la obligación de marcar toda tarea completada en el mismo PR que la completa. Las hace obligatorias el principio 13 de la constitución.
-   📄 [Ver archivo](./docs/Pull%20request%20and%20task%20tracking%20conventions.md)
+## Contributing
 
-5. **Informe**  
-   Documento que resume los objetivos, la solución técnica, el proceso de despliegue, y las herramientas utilizadas en el proyecto.
-   📄 [Ver archivo](./docs/Report.md)
+Every change follows the pull request and task tracking conventions and the
+repository's pull-request template. Documents are written in English, in a
+professional register and in the third person, without emoji. A change to the
+constitution follows its amendment process.

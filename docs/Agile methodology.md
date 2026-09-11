@@ -1,62 +1,68 @@
-# 🧠 **MicroTodoSuite** – Metodología Ágil
+# Agile Methodology
 
-Este documento describe la metodología ágil adoptada para la gestión del proyecto **MicroTodoSuite**, explicando por qué
-**Kanban** es la opción más adecuada considerando las características del equipo, los objetivos del proyecto y el
-enfoque de despliegue continuo en la nube.
+**Status**: current as of 2026-09-11.
 
-## 📌 Características del Proyecto
+GaCode Solutions manages MicroTodoSuite with Kanban: a continuous flow of work
+pulled through a single board, without fixed iterations. This document
+describes the team, the board, and the policies that govern the flow.
 
-| Elemento                       | Descripción                                                                                |
-|--------------------------------|--------------------------------------------------------------------------------------------|
-| 🎯 Objetivo principal          | Despliegue automatizado de infraestructura para una aplicación de microservicios en Azure. |
-| 🧑‍🤝‍🧑 Estructura del equipo | 2 equipos funcionales (Desarrollo y Operaciones), cada uno con 3 personas.                 |
-| 🔁 Cadencia de entregas        | Flujo continuo con despliegues incrementales diarios y entregas bajo demanda.              |
-| 🛠️ Cultura DevOps             | Automatización de CI/CD, monitoreo con Prometheus y Grafana, y IaC con Terraform.          |
-| ☁️ Infraestructura dinámica    | Uso de recursos en la nube gestionados como código y desacoplados por servicio.            |
+## Why Kanban
 
-## ✅ Metodología Elegida: **Kanban Dual**
+| Factor | Reasoning |
+| --- | --- |
+| Continuous delivery | Changes ship whenever a pull request is green; fixed iterations would add waiting without adding control. |
+| Small team, distinct lanes | Three engineers own separate areas. A shared board with lanes shows each area's flow and the dependencies between them. |
+| Externally gated work | Infrastructure applies, quota increases, and approvals wait on people and providers. Kanban makes blocked work visible instead of hiding it inside an iteration. |
+| Specification-driven detail | Task-level planning already lives in Spec Kit registers, so the board tracks functional blocks rather than duplicating hundreds of tasks. |
 
-Hemos implementado un modelo **Kanban Dual** con dos tableros independientes pero coordinados:
+## Team and lanes
 
-- **Kanban - Development Team**: Gestión del ciclo de vida de desarrollo de microservicios
-- **Kanban - Operations Team**: Gestión de despliegues, monitorización y operaciones en la nube
+| Lane | Owner | Scope |
+| --- | --- | --- |
+| Infrastructure | Esteban Gaviria (maintainer) | Terraform, AWS and Azure foundations, environment lifecycle, cluster bootstrap |
+| CI/CD | Juan Manuel Díaz | Reusable workflows, test suites, supply-chain gates, promotion |
+| Observability | Santiago Valencia | Metrics, logs, traces, alerting, and their live evidence |
+| Governance | Esteban Gaviria (maintainer) | Constitution, conventions, decisions, and program registers |
 
-### ¿Por qué Kanban?
+## The board
 
-| Factor                    | Justificación en MicroTodoSuite                                                                               |
-|---------------------------|---------------------------------------------------------------------------------------------------------------|
-| 🎯 Flujo continuo         | Permite entregas bajo demanda sin iteraciones rígidas, ideal para despliegues frecuentes en la nube.          |
-| 📊 Visualización dual     | Dos tableros especializados facilitan el enfoque específico de cada equipo.                                   |
-| 🚦 Control de WIP         | Límites de trabajo en progreso aseguran capacidad equilibrada entre desarrollo y operaciones.                 |
-| 🧩 Flexibilidad           | Priorización dinámica adaptada a necesidades cambiantes de infraestructura cloud.                             |
-| 🤝 Colaboración asíncrona | Tarjetas compartidas entre tableros facilitan la transición desarrollo → operaciones sin ceremonias formales. |
+All 2026 work is on one organization project,
+[MicroTodoSuite Delivery 2026](https://github.com/orgs/MicroTodoSuite/projects/7).
+The two 2025 boards are closed and kept as history.
 
-## 🔁 Flujo de Trabajo Kanban
+- **Items are functional blocks.** Each item is an issue in the repository that
+  owns the block, and it links to the task register that details it
+  (`specs/<feature>/tasks.md`). The register, not the board, is the source of
+  truth for task status.
+- **Status**: Backlog, In Progress, In Review, Blocked, Done.
+- **Lane**: Infrastructure, CI/CD, Observability, Governance.
+- **Progress**: the count of ticked tasks in the block's register.
 
-### Estructura de los Tableros
+## Flow policies
 
-**Development Team Board**  
-`Backlog` → `In Analysis` (WIP 3) → `In Development` (WIP 4) → `Done`
+- **Pull, do not push.** An owner moves a block to In Progress when the lane has
+  capacity, not when the block is assigned.
+- **WIP limit.** A lane holds at most two blocks In Progress. A third block
+  starts only when one of the two moves to In Review, Blocked, or Done.
+- **In Review** means the pull requests that complete the block are open.
+- **Blocked** means the block waits on something outside the lane — an approval,
+  a quota increase, another block — and a comment on the item names it.
+- **Done** means every task in the block's register is ticked against a located
+  artifact, and every verification task has an observed run, as §7 of the
+  conventions requires. A green check alone does not close a block.
 
-**Operations Team Board**  
-`Backlog` (WIP 2) → `In Configuration` → `Stable`
+## Measures
 
-## 📊 Métricas Clave
+The board's history supports three measures:
 
-- **Cycle Time Desarrollo:** Tiempo promedio desde "En Desarrollo" hasta "Listo para Despliegue"
-- **Deployment Lead Time:** Tiempo desde "Listo para Despliegue" hasta "Estable"
-- **Throughput Semanal:** Tareas completadas por equipo
-- **WIP Overflow:** Porcentaje de veces que se exceden los límites WIP
+- **Cycle time**: the time from In Progress to Done for a block.
+- **Blocked time**: the time a block spends in Blocked, which shows where
+  external dependencies slow delivery.
+- **Throughput**: the number of blocks and register tasks completed per week.
 
-## 📌 Conclusión
+## What this replaced
 
-El modelo **Kanban Dual** provee la flexibilidad necesaria para gestionar paralelamente el desarrollo ágil de
-microservicios y las operaciones cloud complejas. Los dos tableros especializados permiten:
-
-- 🎯 Enfoque en dominios técnicos distintos
-- 🔄 Flujo visualizado de desarrollo a producción
-- 🚦 Control granular de capacidad por equipo
-- 🤝 Coordinación mínima pero efectiva entre equipos
-
-Esta adaptación de Kanban soporta perfectamente los requerimientos de **MicroTodoSuite**, combinando entrega continua
-con estabilidad operacional en entornos cloud dinámicos.
+The 2025 project used two boards, one for development and one for operations,
+with separate columns and WIP limits. The team is now organized by lane rather
+than by development and operations, and a single board with a Lane field
+replaced the pair.
