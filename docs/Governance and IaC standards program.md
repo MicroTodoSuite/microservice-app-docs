@@ -26,6 +26,11 @@ the work end to end. It is itself written to rule 4.
 
 ---
 
+> **Register, 2026-09-11.** This document's phases now live as tasks, with
+> owners and order, in `microservice-app-ai-agents/specs/001-governance-and-iac-program/`,
+> which reflects that the economical runtime was brought down on 2026-09-11.
+> Where the two disagree, the register is current.
+
 ## 0. Done on 2026-09-10
 
 | Item | Where |
