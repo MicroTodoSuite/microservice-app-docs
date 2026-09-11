@@ -1,9 +1,8 @@
 # ADR-0001 — Multicloud Strategy
 
 **Date**: 2026-09-11
-**Status**: Proposed. It changes constitution principle 12 and spec 009 user
-story 5, so it takes effect only through the constitution amendment that
-accompanies it.
+**Status**: Accepted on 2026-09-11. Constitution 4.0.0 (microservice-app-docs#22) and spec 009
+(microservice-app-gitops#108) carry it.
 **Decision owner**: the maintainer.
 
 ## Context — why two clouds were chosen
