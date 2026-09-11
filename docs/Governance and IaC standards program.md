@@ -365,3 +365,19 @@ amendments rather than this table alone: G3 overrides the rule that the
 economical environment is never destroyed, and G5 rewrites constitution
 principle 12. Both are in the constitution amendment that accompanies
 ADR-0001.
+
+### Decisions delegated by the maintainer, 2026-09-11
+
+The maintainer asked the drafting agent to take the remaining open decisions
+"that best fit what has been discussed". They were taken on that basis and may
+be overturned by the maintainer.
+
+| # | Decision | Taken |
+| --- | --- | --- |
+| D1 | Spec 006 version drift (plan-reconciliation E1) | The vendoring is right; spec 006's register is amended to kube-prometheus v0.18.0, Grafana 13.2.0, Loki 3.7.6 with Alloy 1.18.1, and Jaeger 2.20.0. Jaeger v1 reached end of life on 2025-12-31 |
+| D2 | Capacity limits L1–L6 | L1 delete the default VPC; L2 `fstg` as a transit spoke; L3 two bootstrap nodes for `eco`, one per full cluster; L4 an 8-vCPU Karpenter Spot ceiling per full cluster (24 in total, as spec 009 T086 sets); L5 replaced by ADR-0001 — `fprd` stays in `us-east-1` as a transit spoke; L6 `eco` keeps one NAT gateway per zone, the multi-AZ resilience the constitution names for the economical profile, whose idle cost the lifecycle `down` already removes. Because `us-east-1` then sits at five VPCs of five, the VPC quota is raised to ten before the full profile comes up |
+| D3 | `fstg` with its own NAT or as a transit spoke | Transit spoke: the egress hub already reserves its route table, and it saves an Elastic IP |
+| D4 | Modules in `terraform-aws-modules` from the start, or local first | From the start, consumed by tag; a local path only on a development branch, as PC-IAC-015 allows. Nothing is running, so there is nothing to migrate |
+| — | Decision 1 of the execution plan: re-point spec 009 by account only, or by account and region | Account and region together; with `fprd` in `us-east-1` the region change reduces to declaring the region per environment |
+| — | ADR-0001 | Accepted: constitution 4.0.0 and spec 009 carry it |
+| — | Economical cold DR | Velero backups to an off-provider Azure store once the Azure estate exists. Until then, the lifecycle `down` must snapshot every PersistentVolume, or record consent to lose it, before quiescence — the 2026-09-11 teardown lost four observability volumes because it did neither |

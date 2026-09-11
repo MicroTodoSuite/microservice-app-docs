@@ -299,6 +299,9 @@ record disagree. None of them should be resolved by quietly editing one side.
 
 ### E1 — Spec 006 pins versions that were never shipped
 
+> **Resolved 2026-09-11**: the vendoring is right; spec 006's register is amended
+> to the vendored versions. Jaeger v1 reached end of life on 2025-12-31.
+
 | Component | Spec 006 says | Actually vendored |
 | --- | --- | --- |
 | kube-prometheus | v0.16.0 | v0.18.0 |

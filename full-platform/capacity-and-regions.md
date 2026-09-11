@@ -1,7 +1,7 @@
 # Capacity, Regions, and the Account Parameter
 
 **Date**: 2026-09-10
-**Status**: proposal. Every item marked *Decision* is the maintainer's to take.
+**Status**: decided on 2026-09-11 — see §6.
 **Corrected**: 2026-09-11 — §3's `us-east-2` figures were unverified and wrong; §4's region proposal is superseded by ADR-0001.
 **Relates to**: `full-platform/infrastructure-execution-plan.md` §1 and §4.
 
@@ -328,10 +328,10 @@ move it, and a contract that fails when any copy disagrees.
 
 | # | Decision | Status |
 | --- | --- | --- |
-| 1 | Re-point spec 009 — A (account only) or B (account and region) | Open; B recommended |
-| 2 | Recreate `demo-full` now with its own NAT, or later as a transit spoke | Open |
-| 3 | The limits L1–L6 | Open; replaces the three quota options in the execution plan |
+| 1 | Re-point spec 009 — A (account only) or B (account and region) | **Decided**: B, reduced to declaring the region per environment |
+| 2 | Recreate `demo-full` now with its own NAT, or later as a transit spoke | **Decided**: transit spoke, in the new layout |
+| 3 | The limits L1–L6 | **Decided**: L1–L4 and L6 as proposed; L5 replaced by ADR-0001; VPC quota raised to ten |
 | 4 | Is there an Azure subscription? | **Answered**: Azure for Students, six vCPUs per region |
-| 5 | Spec 006's version drift (E1) | Open; unchanged, see the execution plan |
-| 6 | Region layout, and which of ECR, Secrets Manager and state to copy to `us-east-2` | Open |
-| 7 | Economical cold DR through Velero, or single-region by design | Open |
+| 5 | Spec 006's version drift (E1) | **Decided**: the vendored versions |
+| 6 | Region layout, and which of ECR, Secrets Manager and state to copy to `us-east-2` | **Decided** by ADR-0001: every AWS environment in `us-east-1`; Azure is the recovery domain |
+| 7 | Economical cold DR through Velero, or single-region by design | **Decided**: Velero to Azure with the Azure estate; PersistentVolume snapshots before every `down` until then |
