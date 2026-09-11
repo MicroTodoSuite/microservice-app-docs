@@ -340,16 +340,23 @@ every row above carries a task ID.
 
 ---
 
-## 11. Decisions requested
+## 11. Decisions — taken by the maintainer on 2026-09-11
 
-| # | Decision | Recommendation |
+| # | Decision | Consequence |
 | --- | --- | --- |
-| G1 | Board granularity: one issue per open task, grouped under parent issues per block — or one issue per block | One per task, with parents |
-| G2 | The `client` segment and environment codes for PC-IAC-003 inside 28 characters | A short `client` (for example `icesi`), a short `project` (for example `mts`), and environment codes that encode the profile |
-| G3 | Rename live resources now, or only when they are next recreated | Only when recreated; record each live name as an exception |
-| G4 | Module repositories: strictly one per module, and their naming | Strictly one per module, `terraform-<provider>-<name>` |
-| G5 | Azure live configuration in `microservice-app-ops` or its own repository | Its own repository: separate backend, identity, and blast radius |
-| G6 | Enable the ops ruleset that requires one approval | The maintainer's call; it stops agent merges in ops |
-| G7 | Archive `microservice-app-prometheus` and `microservice-app-example`; close the two 2025 boards | Archive both; close both boards |
-| G8 | `feat/profile-lifecycle`: land first and refactor afterwards, or adopt the target layout now | Land first |
-| G9 | The course rules: `MicroTodoSuite/rules-iac-modules/` is the complete set | Confirmation needed |
+| G1 | The board groups work into **large functional blocks**: one issue per block, with a checklist of its activities; never an issue per task. **All 2026 work appears**, completed included, consolidated in blocks | The registers stay the task-level record; the board is the block-level view |
+| G2 | A client is defined, and the naming convention is formal and documented | Client `gcs` (GaCode Solutions, the owner named in the organization profile), project `mts`, environments `shd`, `eco`, `fdev`, `fstg`, `fprd` — `rules/iac/MTS-IAC-101` in the AI repository |
+| G3 | **Adopt the convention fully, now**: bring down every deployed resource that must change, rename, and recreate it — EKS included — after preserving everything persistent or sensitive, then validate and leave no orphan or old reference | ops spec 004; constitution amendment for the economical rebuild; MTS-IAC-107 |
+| G4 | **One module repository per cloud provider** (`terraform-aws-modules`, `terraform-azure-modules`), not one per module and not one for all; modules versioned independently | `rules/iac/MTS-IAC-102`; supersedes PC-IAC-015's "one module, one repository" |
+| G5 | Re-evaluate why the project is multicloud and redefine the criterion if it is weak, keeping multicloud as the goal | `docs/ADR-0001 Multicloud strategy.md`: Azure becomes an independent recovery domain, active-passive |
+| G6 | Requiring one approval on the ops `main` branch is the **definitive policy**, but it stays **disabled** until the pending implementation is complete and stable | A board item holds the activation, triggered by the end of the rebuild's validation |
+| G7 | Keep `microservice-app-prometheus` if it is still used; archive `microservice-app-example` if it serves no function; archive the old boards | `example` archived on 2026-09-11 (an unreferenced 2025 fork). `prometheus` is referenced nowhere, and the economical cluster runs the Prometheus Operator from GitOps, not this image — recommended for archiving, awaiting the maintainer's confirmation |
+| G8 | Land `feat/profile-lifecycle` first, refactor afterwards; never in the same change | Landed as ops#34 and #35 |
+| G9 | `MicroTodoSuite/rules-iac-modules/` is the source of the rules | Reviewed in full and adapted |
+| — | Create and use `AWS_ACCOUNT_ID` properly | Declared per MTS-IAC-103; the organization variable needs an organization owner's token scope |
+
+Two decisions change earlier constraints and therefore need recorded
+amendments rather than this table alone: G3 overrides the rule that the
+economical environment is never destroyed, and G5 rewrites constitution
+principle 12. Both are in the constitution amendment that accompanies
+ADR-0001.
