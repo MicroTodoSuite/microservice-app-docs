@@ -134,7 +134,7 @@ where a section genuinely does not apply.
 | **Tasks** | The task IDs this PR advances, each with the register it lives in — `gitops specs/007-advanced-testing T014`. See §7. |
 | **How it is verified** | The exact commands run and their result. For a guard, the mutation result. For infrastructure, the plan summary. |
 | **Risk and rollback** | What could break and how to undo it. For GitOps, this is normally "revert the commit"; say so rather than leaving it blank. |
-| **What this PR does not do** | Scope you deliberately left out, so a reviewer does not look for it. |
+| **What this PR does not do** | Scope deliberately left out, so a reviewer does not look for it. |
 
 **Evidence is quoted, not described.** "Tests pass" is not verification; the
 command and its output tail is. Where output is long, quote the decisive lines.
@@ -174,7 +174,7 @@ Rules that hold everywhere:
 - **Never merge with `--admin`, and never force-push to `main`.** Spec 009 T160
   audits for exactly this. If a protection rule blocks a merge, the rule is
   working; get the approval.
-- **Never disable a branch protection rule to land your own work.** Removing the
+- **Never disable a branch protection rule to land one's own work.** Removing the
   review requirement to merge unreviewed changes makes the audit trail record a
   review that did not happen.
 - **No one approves their own pull request.** GitHub enforces this; do not route
@@ -188,8 +188,8 @@ Rules that hold everywhere:
   already failing on `main` for an unrelated reason does not — merging a
   documentation change into a repository whose image scan was red yesterday
   neither causes nor hides anything. State the pre-existing failure in the body
-  so the reviewer can see you knew about it. What is never acceptable is
-  merging past a check *your own change* broke.
+  so the reviewer can see the author knew about it. What is never acceptable is
+  merging past a check *the change itself* broke.
 - A security finding is a team decision recorded in its own reviewed change,
   never a suppression slipped into a feature branch.
 
@@ -219,7 +219,7 @@ Concretely:
    things and two exist, it stays `[ ]` and the PR body says which part landed.
    Spec 007 T011 and T012 are the worked example: one pact of three shipped.
 
-5. **Work with no task gets a task first.** If you are about to do something the
+5. **Work with no task gets a task first.** Before starting something the
    registers do not cover, add the task — or, for a genuinely trivial fix,
    record in the PR body that no register applies and why. "No task" is a
    statement someone must be able to disagree with, not a silence.
@@ -263,7 +263,7 @@ are failure modes automation has and people mostly do not:
 - **Report outcomes faithfully.** If the work is partially done, say which part.
   If a test was not run, say it was not run. A PR body that overstates what was
   verified is worse than no PR body.
-- **Correct your own record.** If a claim in an earlier commit or PR body turns
+- **Correct the record.** If a claim in an earlier commit or PR body turns
   out to be wrong, amend it or say so plainly in the next one. A commit message
   asserting a CVE was fixed when it was not is a defect in the audit trail.
 - **Do not work around a blocked action.** A refused permission, a protected
