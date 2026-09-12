@@ -382,6 +382,6 @@ Deliberately **not** changed:
   not a bookkeeping edit.
 - **Spec 001's status** (C5). Retiring a specification is a decision, not a
   reconciliation.
-- Any task whose text I could not fully verify. Where an artifact exists but the
+- Any task whose text could not be fully verified. Where an artifact exists but the
   task asks for more than the artifact provides — ops-001 T031 and T046 — the
   task stays unchecked and the partial delivery is recorded here instead.
