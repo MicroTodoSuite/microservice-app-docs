@@ -8,7 +8,9 @@ this document is the detail that principle points at.
 
 **Amended**: 2026-09-10, at the maintainer's request — §3 now covers the whole
 organization and sets the voice; §6 and §9 make the author merge a green pull
-request wherever no approval is required.
+request wherever no approval is required. 2026-09-12 — §2 and §6 merge a
+Spec-Driven Development pair with a merge commit, because squashing it destroyed
+the evidence §2 exists to keep.
 
 These conventions codify what the project already does well in places and did
 inconsistently elsewhere. They exist because two concrete failures happened:
@@ -70,7 +72,8 @@ feat(us3): implement the auth-api operational contract
 ```
 
 Do not squash that pair. The failing-test commit is the evidence that the cycle
-was followed; collapsing it destroys the proof.
+was followed; collapsing it destroys the proof. A pull request carrying a pair
+therefore merges with a merge commit (§6), which keeps both commits on `main`.
 
 **The body explains why.** A summary line that restates the diff is wasted. If
 the change fixes a real defect, name the defect and its consequence. If a claim
@@ -153,8 +156,9 @@ red, say what is red and why. If a step was skipped, say it was skipped.
 pull request is green when every check it triggered has passed — none pending,
 none failed, none skipped because another step failed — every verification its
 body names was actually run and passed, it merges cleanly into `main`, and every
-template section is filled. The author then squash-merges it and deletes the
-branch rather than leaving it open. Where an approval is required, the author
+template section is filled. The author then merges it — a squash merge, or a
+merge commit for a Spec-Driven Development pair — and deletes the branch rather
+than leaving it open. Where an approval is required, the author
 requests review and waits.
 
 The author does **not** merge, even where nothing requires approval, when:
@@ -182,8 +186,13 @@ Rules that hold everywhere:
 - **An AI agent may open, describe, and update a pull request. It may never
   approve one, and may never author an acceptance or approval artifact.** Only a
   named human unlocks a gate.
-- Squash-merge and delete the branch. The PR body survives as the merge commit
-  message, which is why it has to be worth reading.
+- Squash-merge and delete the branch. The PR title and body become the commit
+  title and message, which is why they have to be worth reading. **The one
+  exception is a pull request carrying a Spec-Driven Development pair (§2):** it
+  merges with a merge commit, whose title and message are also the PR's, so the
+  failing `test(...)` commit and the `feat(...)` commit both stay on `main`. It
+  is never squashed and never rebased. Repository settings therefore allow
+  squash merges and merge commits, and forbid rebase merges.
 - **A check that this change turned red blocks the merge.** A check that was
   already failing on `main` for an unrelated reason does not — merging a
   documentation change into a repository whose image scan was red yesterday
