@@ -375,7 +375,7 @@ be overturned by the maintainer.
 | # | Decision | Taken |
 | --- | --- | --- |
 | D1 | Spec 006 version drift (plan-reconciliation E1) | The vendoring is right; spec 006's register is amended to kube-prometheus v0.18.0, Grafana 13.2.0, Loki 3.7.6 with Alloy 1.18.1, and Jaeger 2.20.0. Jaeger v1 reached end of life on 2025-12-31 |
-| D2 | Capacity limits L1–L6 | L1 delete the default VPC; L2 `fstg` as a transit spoke; L3 two bootstrap nodes for `eco`, one per full cluster; L4 an 8-vCPU Karpenter Spot ceiling per full cluster (24 in total, as spec 009 T086 sets); L5 replaced by ADR-0001 — `fprd` stays in `us-east-1` as a transit spoke; L6 `eco` keeps one NAT gateway per zone, the multi-AZ resilience the constitution names for the economical profile, whose idle cost the lifecycle `down` already removes. `us-east-1` then sits at five VPCs of five. ~~Because of that, the VPC quota is raised to ten before the full profile comes up~~ — withdrawn by the maintainer on 2026-09-13; see the amendment below |
+| D2 | Capacity limits L1–L6 | L1 delete the default VPC; L2 `fstg` as a transit spoke; L3 ~~two~~ three bootstrap nodes for `eco` (amended by the maintainer on 2026-09-14; see below), one per full cluster; L4 an 8-vCPU Karpenter Spot ceiling per full cluster (24 in total, as spec 009 T086 sets); L5 replaced by ADR-0001 — `fprd` stays in `us-east-1` as a transit spoke; L6 `eco` keeps one NAT gateway per zone, the multi-AZ resilience the constitution names for the economical profile, whose idle cost the lifecycle `down` already removes. `us-east-1` then sits at five VPCs of five. ~~Because of that, the VPC quota is raised to ten before the full profile comes up~~ — withdrawn by the maintainer on 2026-09-13; see the amendment below |
 | D3 | `fstg` with its own NAT or as a transit spoke | Transit spoke: the egress hub already reserves its route table, and it saves an Elastic IP |
 | D4 | Modules in `terraform-aws-modules` from the start, or local first | From the start, consumed by tag; a local path only on a development branch, as PC-IAC-015 allows. Nothing is running, so there is nothing to migrate |
 | — | Decision 1 of the execution plan: re-point spec 009 by account only, or by account and region | Account and region together; with `fprd` in `us-east-1` the region change reduces to declaring the region per environment |
@@ -428,3 +428,26 @@ taken on that basis and may be overturned by the maintainer.
 creates its IAM role; the legacy module's opt-in prerequisite has no
 counterpart. It is recorded as microservice-app-ops spec 004 T031 and must land
 before the controller is activated on a full cluster.
+
+### Amendment of L3 by the maintainer, 2026-09-14
+
+The maintainer raised the economical cluster from two bootstrap nodes to three.
+
+- **Why.** After the rebuild reactivated every Application of
+  `lex-mts-eco-eks-main`, the pods' CPU requests filled 93% and 99% of the two
+  nodes. Nothing further could be scheduled, and the AWS Load Balancer
+  Controller that publishes the economical environments under
+  `eco.microtodosuite.online` needs room for two replicas.
+- **Quota.** The account's On-Demand Standard quota is 16 vCPU. With both
+  profiles up, the three `eco` nodes and the three full bootstrap nodes, each
+  an `m7i-flex.large` with 2 vCPU, hold 12 of them. The managed node groups do
+  not scale by themselves. Raising them all to their maximums (four for `eco`,
+  two per full cluster) would need 20 vCPU, so any further On-Demand increase
+  reopens the quota question. Karpenter's Spot capacity counts against the
+  separate 32-vCPU Spot quota, under L4's 24-vCPU ceiling.
+- **Cost.** One more `m7i-flex.large` in the economical cluster, about $70 a
+  month while it runs. The lifecycle's `down` removes it with the rest of the
+  runtime.
+- **Record.** The operator's `eco.tfvars` sets `node_scaling` to three, three,
+  and four. The committed example and README follow in microservice-app-ops.
+
