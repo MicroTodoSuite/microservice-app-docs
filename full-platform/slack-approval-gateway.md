@@ -34,11 +34,13 @@ Unlike the release/promoter Apps (consumed by GitHub Actions, so their credentia
 
 | Secret | Used by |
 | --- | --- |
-| `SLACK_APPROVER_APP_ID` / `SLACK_APPROVER_APP_KEY` | Both Lambdas -- mint an installation token |
+| `SLACK_APPROVER_APP_KEY` | Both Lambdas -- mint an installation token |
 | `SLACK_SIGNING_SECRET` | `slack-interaction-handler` -- verifies a click really came from Slack |
 | `SLACK_BOT_TOKEN` | Both Lambdas -- post/update Slack messages |
 | `GITHUB_WEBHOOK_SECRET` | `github-webhook-handler` -- verifies a webhook really came from GitHub |
 | `ANTHROPIC_API_KEY` | Both Lambdas -- the non-technical rephrasing |
+
+The App id itself (`SLACK_APPROVER_APP_ID`) is not sensitive -- a GitHub App id is public information -- so it is passed straight through as a plain Lambda environment variable rather than a Secrets Manager entry. `microservice-app-ops`'s own delivery contract (`tests/contract/aws-dev-foundation.sh`) forbids an ordinary, state-persisted Secrets Manager value anywhere in `aws/`, precisely so no one has to judge case-by-case whether a given value is "sensitive enough" to earn the write-only treatment.
 
 ## Private-key handling: mode 0600, then gone
 
