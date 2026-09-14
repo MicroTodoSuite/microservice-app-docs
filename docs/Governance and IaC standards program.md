@@ -406,3 +406,25 @@ limits alone must fit the platform, without waiting on an AWS quota request.
     the default VPC deletion.
   - microservice-app-ops spec 004 T026 no longer includes the default VPC,
     which moves to T028.
+
+### Decisions delegated by the maintainer, 2026-09-14
+
+The maintainer asked the working agent to take the decisions still open before
+the full environments come up, "based on what has been discussed and the best
+technical choices for what has been defined", and to implement them. They were
+taken on that basis and may be overturned by the maintainer.
+
+| Task | Decision | Taken |
+| --- | --- | --- |
+| ai-agents T043 | How to record access to the Terraform state bucket | A CloudTrail trail, `lex-mts-shd-ct-tfstate` in `shd/security`. It records only the state bucket's S3 object-level data events, encrypts them with its own key `lex-mts-shd-kms-cloudtrail`, and validates every log file with digest files. **Not CloudTrail Lake:** AWS moved it to maintenance on 2026-04-30, and it is closed to new customers. **The trail's log bucket keeps no access logs.** Its SonarCloud `terraform:S6258` finding is a recorded exception, because access logs would need a further bucket raising the same finding, and a trail cannot record its own bucket. The exception moves from the bucket holding the state to one holding only audit records. Delivered in terraform-aws-modules#40, #41, and #42 (`cloudtrail-trail-v1.0.0`) and microservice-app-ops#104; the apply is the maintainer's |
+| ops spec 004 T003 | Whether a teammate's approval satisfies the spec 009 amendment's "maintainer approval" | Yes. gitops `main` requires one approval from a named human, with `enforce_admins`. Tiago0507 gave it on gitops#108, which amends spec 009 to constitution 4.0.0 and ADR-0001, both of which the maintainer had accepted. Requiring a second, maintainer-only approval of text that follows the maintainer's own decisions would add a gate without a reviewer |
+| ai-agents T028 | How to apply capacity limits L1–L6 in the full roots | **L1:** the lifecycle refuses to start an up transition while the Region's VPCs plus the ones it would create exceed the VPCs-per-Region quota. **L3:** each full workload root keeps exactly one bootstrap node, able to grow to two. Both are in microservice-app-ops#103, which also re-delivers spec 009 T040 and T041's single-address `/32` public endpoint. **L2, L5, and L6** were already what the roots build. **L4** is a Karpenter `NodePool` limit, owned by GitOps (gitops spec 009 T086). Spec 009's account and region are re-pointed to the declared parameters in gitops#173 |
+| ai-agents T045 | Who deletes the default VPC | The maintainer. It was verified empty on 2026-09-14 (no network interface, instance, endpoint, NAT gateway, peering, or transit gateway attachment) and every attribute was saved and checksummed under `~/backups-microtodosuite/default-vpc-20260914T201419Z/`. The agent's deletion was refused by its permission classifier as irreversible, which is correct for an agent. Until the maintainer deletes it, the L1 guard keeps the full profile from starting |
+| ai-agents T022 | The `terraform-aws-modules` branch protection | Every change through a pull request, with the six checks the repository runs required (`iac` rule contracts, `terraform fmt, validate, and test`, tflint, Trivy, the delivery conventions, and SonarCloud). No approval is required, consistent with gitops being the only repository that requires one. Administrators are included, and force pushes and branch deletion are refused. A repository setting, applied by the maintainer |
+| Karpenter prerequisites | The node identity and the queue key | The nodes Karpenter launches reuse each environment's bootstrap node role, whose Amazon EKS access entry already authorizes them, so there is no second role, access entry, or `iam:PassRole` grant. The interruption queue takes SQS-managed encryption, as Karpenter's reference template does, not a customer key per environment. microservice-app-ops#101 |
+
+**Found while doing so.** GitOps vendors the AWS Load Balancer Controller
+(`infrastructure/aws-load-balancer-controller`, v3.5.0), but no rebuilt root
+creates its IAM role; the legacy module's opt-in prerequisite has no
+counterpart. It is recorded as microservice-app-ops spec 004 T031 and must land
+before the controller is activated on a full cluster.
