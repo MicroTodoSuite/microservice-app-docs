@@ -402,7 +402,7 @@ limits alone must fit the platform, without waiting on an AWS quota request.
 - **Elastic IPs keep headroom.** The peak holds four of five: three for `eco`'s
   NAT gateways and one for the egress hub.
 - **Registers.**
-  - microservice-app-ai-agents specs/001 T039 is withdrawn, and T043 carries
+  - microservice-app-ai-agents specs/001 T039 is withdrawn, and T045 carries
     the default VPC deletion.
   - microservice-app-ops spec 004 T026 no longer includes the default VPC,
     which moves to T028.
