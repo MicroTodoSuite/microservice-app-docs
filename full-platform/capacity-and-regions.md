@@ -3,6 +3,7 @@
 **Date**: 2026-09-10
 **Status**: decided on 2026-09-11 — see §6.
 **Corrected**: 2026-09-11 — §3's `us-east-2` figures were unverified and wrong; §4's region proposal is superseded by ADR-0001.
+**Amended**: 2026-09-13 — the maintainer withdrew the VPC quota increase; see §3 and §6.
 **Relates to**: `full-platform/infrastructure-execution-plan.md` §1 and §4.
 
 This document answers four questions raised after the execution plan:
@@ -187,6 +188,11 @@ Azure as the production recovery domain, `fprd` stays in `us-east-1` as a
 transit spoke. After L1 deletes the default VPC, `us-east-1` then holds five VPCs
 of five, four Elastic IPs of five, and 10 On-Demand vCPUs of 16.
 
+**Five VPCs of five is also the ceiling.** The maintainer withdrew the quota
+increase on 2026-09-13. The default VPC must therefore be deleted before the
+fifth VPC is created, and no VPC is spare. Measured again on 2026-09-13, the
+quota is 5, and the default VPC is the only VPC in the region.
+
 ### What the peak costs
 
 Approximate on-demand list prices, excluding data transfer, EBS, logs and Spot;
@@ -330,7 +336,7 @@ move it, and a contract that fails when any copy disagrees.
 | --- | --- | --- |
 | 1 | Re-point spec 009 — A (account only) or B (account and region) | **Decided**: B, reduced to declaring the region per environment |
 | 2 | Recreate `demo-full` now with its own NAT, or later as a transit spoke | **Decided**: transit spoke, in the new layout |
-| 3 | The limits L1–L6 | **Decided**: L1–L4 and L6 as proposed; L5 replaced by ADR-0001; VPC quota raised to ten |
+| 3 | The limits L1–L6 | **Decided**: L1–L4 and L6 as proposed; L5 replaced by ADR-0001; ~~VPC quota raised to ten~~. **Amended 2026-09-13** by the maintainer: no quota increase. The default VPC is deleted before the full profile's VPCs, and `us-east-1` runs at five VPCs of five |
 | 4 | Is there an Azure subscription? | **Answered**: Azure for Students, six vCPUs per region |
 | 5 | Spec 006's version drift (E1) | **Decided**: the vendored versions |
 | 6 | Region layout, and which of ECR, Secrets Manager and state to copy to `us-east-2` | **Decided** by ADR-0001: every AWS environment in `us-east-1`; Azure is the recovery domain |

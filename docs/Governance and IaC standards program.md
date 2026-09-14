@@ -375,9 +375,34 @@ be overturned by the maintainer.
 | # | Decision | Taken |
 | --- | --- | --- |
 | D1 | Spec 006 version drift (plan-reconciliation E1) | The vendoring is right; spec 006's register is amended to kube-prometheus v0.18.0, Grafana 13.2.0, Loki 3.7.6 with Alloy 1.18.1, and Jaeger 2.20.0. Jaeger v1 reached end of life on 2025-12-31 |
-| D2 | Capacity limits L1–L6 | L1 delete the default VPC; L2 `fstg` as a transit spoke; L3 two bootstrap nodes for `eco`, one per full cluster; L4 an 8-vCPU Karpenter Spot ceiling per full cluster (24 in total, as spec 009 T086 sets); L5 replaced by ADR-0001 — `fprd` stays in `us-east-1` as a transit spoke; L6 `eco` keeps one NAT gateway per zone, the multi-AZ resilience the constitution names for the economical profile, whose idle cost the lifecycle `down` already removes. Because `us-east-1` then sits at five VPCs of five, the VPC quota is raised to ten before the full profile comes up |
+| D2 | Capacity limits L1–L6 | L1 delete the default VPC; L2 `fstg` as a transit spoke; L3 two bootstrap nodes for `eco`, one per full cluster; L4 an 8-vCPU Karpenter Spot ceiling per full cluster (24 in total, as spec 009 T086 sets); L5 replaced by ADR-0001 — `fprd` stays in `us-east-1` as a transit spoke; L6 `eco` keeps one NAT gateway per zone, the multi-AZ resilience the constitution names for the economical profile, whose idle cost the lifecycle `down` already removes. `us-east-1` then sits at five VPCs of five. ~~Because of that, the VPC quota is raised to ten before the full profile comes up~~ — withdrawn by the maintainer on 2026-09-13; see the amendment below |
 | D3 | `fstg` with its own NAT or as a transit spoke | Transit spoke: the egress hub already reserves its route table, and it saves an Elastic IP |
 | D4 | Modules in `terraform-aws-modules` from the start, or local first | From the start, consumed by tag; a local path only on a development branch, as PC-IAC-015 allows. Nothing is running, so there is nothing to migrate |
 | — | Decision 1 of the execution plan: re-point spec 009 by account only, or by account and region | Account and region together; with `fprd` in `us-east-1` the region change reduces to declaring the region per environment |
 | — | ADR-0001 | Accepted: constitution 4.0.0 and spec 009 carry it |
 | — | Economical cold DR | Velero backups to an off-provider Azure store once the Azure estate exists. Until then, the lifecycle `down` must snapshot every PersistentVolume, or record consent to lose it, before quiescence — the 2026-09-11 teardown lost four observability volumes because it did neither |
+
+### Amendment of D2 by the maintainer, 2026-09-13
+
+The maintainer withdrew the VPC quota increase that D2 recorded. The capacity
+limits alone must fit the platform, without waiting on an AWS quota request.
+
+- **Measured on 2026-09-13 in `us-east-1`.**
+  - The VPCs-per-Region quota is 5. The Amazon VPC quotas page gives 5 as the
+    default and marks it adjustable.
+  - The only VPC is the default `172.31.0.0/16`.
+  - No Elastic IP is allocated.
+- **L1 becomes a precondition.** At peak, `eco`, the `shd` egress hub, `fdev`,
+  `fstg`, and `fprd` need five VPCs, so the default VPC must be gone before the
+  fifth is created. It is deleted in its own approved operation before the full
+  profile's VPCs are created. It is no longer bundled with the retention period
+  of the old persistent resources.
+- **No VPC headroom.** A root that replaces its VPC must destroy the old one
+  before it creates the new one. Any sixth VPC reopens this decision.
+- **Elastic IPs keep headroom.** The peak holds four of five: three for `eco`'s
+  NAT gateways and one for the egress hub.
+- **Registers.**
+  - microservice-app-ai-agents specs/001 T039 is withdrawn, and T043 carries
+    the default VPC deletion.
+  - microservice-app-ops spec 004 T026 no longer includes the default VPC,
+    which moves to T028.
