@@ -16,7 +16,7 @@
         <mxCell id="cloud" value="AWS Cloud — account 575172595729" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;verticalAlign=top;align=left;spacingLeft=30;grIcon=mxgraph.aws4.group_aws_cloud_alt;strokeColor=#232F3E;fillColor=none;fontColor=#232F3E;dashed=0;" vertex="1" parent="1">
           <mxGeometry x="250" y="80" width="1480" height="1130" as="geometry" />
         </mxCell>
-        <mxCell id="r53" value="Route 53&lt;br&gt;microtodosuite.online&lt;br&gt;secondary: Azure DNS" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;" vertex="1" parent="cloud">
+        <mxCell id="r53" value="Route 53&lt;br&gt;microtodosuite.online" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.route_53;" vertex="1" parent="cloud">
           <mxGeometry x="46" y="150" width="48" height="48" as="geometry" />
         </mxCell>
         <mxCell id="iam" value="IAM · GitHub OIDC&lt;br&gt;provider and CI roles" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#DD344C;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.identity_and_access_management;" vertex="1" parent="cloud">
@@ -88,7 +88,7 @@
         <mxCell id="note_life" value="&lt;b&gt;Runtime and durable layers.&lt;/b&gt; &lt;i&gt;scripts/aws-profile-lifecycle.sh&lt;/i&gt; brings the runtime — the cluster, nodes, NAT gateways and load balancer — down and back up from reviewed saved plans. The durable layer on the right is never destroyed." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fontSize=11;align=left;verticalAlign=top;spacing=8;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#232F3E;" vertex="1" parent="region">
           <mxGeometry x="20" y="650" width="620" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="note_net" value="&lt;b&gt;Ingress:&lt;/b&gt; one shared ALB, created by the AWS Load Balancer Controller, routes by host — prod at eco.microtodosuite.online; dev, staging and demo at &amp;lt;env&amp;gt;.eco.microtodosuite.online.&lt;br&gt;&lt;b&gt;Egress:&lt;/b&gt; private nodes reach the internet through the NAT gateway in their own AZ." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fontSize=11;align=left;verticalAlign=top;spacing=8;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#232F3E;" vertex="1" parent="region">
+        <mxCell id="note_net" value="&lt;b&gt;Ingress:&lt;/b&gt; one shared ALB, created by the AWS Load Balancer Controller, routes by host — prod at eco.microtodosuite.online; dev, staging and demo at &amp;lt;env&amp;gt;.eco.microtodosuite.online.&lt;br&gt;&lt;b&gt;Egress:&lt;/b&gt; private nodes reach the internet through the NAT gateway in their own AZ.&lt;br&gt;&lt;b&gt;DNS:&lt;/b&gt; Route 53 is primary; Azure DNS serves the same records as secondary name servers." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fontSize=11;align=left;verticalAlign=top;spacing=8;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#232F3E;" vertex="1" parent="region">
           <mxGeometry x="20" y="750" width="620" height="100" as="geometry" />
         </mxCell>
         <mxCell id="k8s" value="Inside lex-mts-eco-eks-main — reconciled by ArgoCD" style="rounded=1;arcSize=2;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontSize=12;fillColor=#EEF3FC;strokeColor=#326CE5;fontColor=#326CE5;" vertex="1" parent="region">
@@ -193,19 +193,19 @@
         <mxCell id="wl_note" value="Default-deny NetworkPolicy, ResourceQuota, LimitRange and RBAC per namespace. Production is an Argo Rollouts canary gated by Prometheus. No service mesh." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#232F3E;" vertex="1" parent="wl">
           <mxGeometry x="12" y="318" width="296" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="a1" value="login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="fe" target="auth">
+        <mxCell id="a1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fe" target="auth">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a2" value="todos + JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="fe" target="todos">
+        <mxCell id="a2" value="todos + JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fe" target="todos">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a3" value="verify user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="auth" target="users_api">
+        <mxCell id="a3" value="verify user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="auth" target="users_api">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a4" value="publish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todos" target="redis">
+        <mxCell id="a4" value="publish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="todos" target="redis">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a5" value="subscribe" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="redis" target="logproc">
+        <mxCell id="a5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="redis" target="logproc">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="durable" value="shd — shared and durable" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontSize=12;fillColor=#F8F9FA;strokeColor=#545B64;fontColor=#232F3E;" vertex="1" parent="region">
@@ -226,7 +226,7 @@
         <mxCell id="ecr" value="ECR · five repositories&lt;br&gt;images by digest" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#ED7100;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.ecr;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=4;" vertex="1" parent="durable">
           <mxGeometry x="16" y="360" width="48" height="48" as="geometry" />
         </mxCell>
-        <mxCell id="lane" value="Delivery — GitHub (MicroTodoSuite organization) and GitOps" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontSize=12;fillColor=#F8F9FA;strokeColor=#545B64;fontColor=#232F3E;" vertex="1" parent="1">
+        <mxCell id="lane" value="Delivery — GitHub and GitOps" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontSize=12;fillColor=#F8F9FA;strokeColor=#545B64;fontColor=#232F3E;" vertex="1" parent="1">
           <mxGeometry x="250" y="1240" width="1480" height="250" as="geometry" />
         </mxCell>
         <mxCell id="gh_ops" value="microservice-app-ops&lt;br&gt;Terraform roots · lifecycle wrapper" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#24292E;shape=mxgraph.azure.github_code;pointerEvents=1;fontSize=11;" vertex="1" parent="lane">
@@ -250,7 +250,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="t3" value="3 · host routing" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#232F3E;strokeWidth=2;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="alb" target="fe">
-          <mxGeometry relative="1" as="geometry">
+          <mxGeometry relative="1" as="geometry" x="-0.93">
             <Array as="points">
               <mxPoint x="1058" y="396" />
               <mxPoint x="1058" y="812" />
@@ -268,14 +268,14 @@
         <mxCell id="c2" value="canary analysis" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#C0392B;strokeWidth=1.5;fontSize=10;fontColor=#C0392B;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="rollouts" target="prom">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="d1" value="build once · push by digest (OIDC)" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#7D3C98;strokeWidth=1.5;fontSize=10;fontColor=#7D3C98;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="gh_svc" target="ecr">
+        <mxCell id="d1" value="push by digest" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#7D3C98;strokeWidth=1.5;fontSize=10;fontColor=#7D3C98;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="gh_svc" target="ecr">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="d2" value="promotion PR · digest only" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#7D3C98;strokeWidth=1.5;fontSize=10;fontColor=#7D3C98;labelBackgroundColor=#FFFFFF;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gh_svc" target="gh_gitops">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="d3" value="pulls desired state" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#7D3C98;strokeWidth=1.5;fontSize=10;fontColor=#7D3C98;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gh_gitops" target="argocd">
-          <mxGeometry relative="1" as="geometry">
+          <mxGeometry relative="1" as="geometry" x="-0.95">
             <Array as="points">
               <mxPoint x="1072" y="238" />
             </Array>
@@ -406,7 +406,7 @@
         <mxCell id="hub_priv" value="Private 10.50.16.0/20&lt;br&gt;Transit Gateway&lt;br&gt;attachment" style="points=[[0,0],[0.25,0],[0.5,0],[0.75,0],[1,0],[1,0.25],[1,0.5],[1,0.75],[1,1],[0.75,1],[0.5,1],[0.25,1],[0,1],[0,0.75],[0,0.5],[0,0.25]];outlineConnect=0;gradientColor=none;html=1;whiteSpace=wrap;fontSize=12;fontStyle=1;container=1;pointerEvents=0;collapsible=0;recursiveResize=0;shape=mxgraph.aws4.group;verticalAlign=top;align=left;spacingLeft=30;grIcon=mxgraph.aws4.group_security_group;grStroke=0;strokeColor=#00A4A6;fillColor=#E6F6F7;fontColor=#147EBA;dashed=0;fontStyle=0;fontSize=11;" vertex="1" parent="hub">
           <mxGeometry x="170" y="40" width="145" height="160" as="geometry" />
         </mxCell>
-        <mxCell id="tgw" value="Transit Gateway&lt;br&gt;centralized egress" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;" vertex="1" parent="region">
+        <mxCell id="tgw" value="Transit Gateway&lt;br&gt;centralized egress" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#8C4FFF;strokeColor=#ffffff;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=11;fontStyle=0;aspect=fixed;shape=mxgraph.aws4.resourceIcon;resIcon=mxgraph.aws4.transit_gateway;labelPosition=right;verticalLabelPosition=middle;align=left;verticalAlign=middle;spacingLeft=4;" vertex="1" parent="region">
           <mxGeometry x="480" y="110" width="48" height="48" as="geometry" />
         </mxCell>
         <mxCell id="inet" value="Internet" style="ellipse;shape=cloud;whiteSpace=wrap;html=1;fontSize=11;fillColor=#FFFFFF;strokeColor=#545B64;" vertex="1" parent="region">
@@ -521,22 +521,22 @@
           <mxGeometry x="10" y="222" width="980" height="236" as="geometry" />
         </mxCell>
         <mxCell id="fe" value="frontend&lt;br&gt;Vue.js" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#232F3E;" vertex="1" parent="wl">
-          <mxGeometry x="20" y="40" width="130" height="44" as="geometry" />
+          <mxGeometry x="20" y="40" width="150" height="44" as="geometry" />
         </mxCell>
         <mxCell id="auth" value="auth-api&lt;br&gt;Go · JWT" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#232F3E;" vertex="1" parent="wl">
-          <mxGeometry x="200" y="40" width="130" height="44" as="geometry" />
+          <mxGeometry x="250" y="40" width="150" height="44" as="geometry" />
         </mxCell>
         <mxCell id="users_api" value="users-api&lt;br&gt;Java Spring Boot" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#232F3E;" vertex="1" parent="wl">
-          <mxGeometry x="380" y="40" width="130" height="44" as="geometry" />
+          <mxGeometry x="480" y="40" width="150" height="44" as="geometry" />
         </mxCell>
         <mxCell id="todos" value="todos-api&lt;br&gt;Node.js" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#232F3E;" vertex="1" parent="wl">
-          <mxGeometry x="200" y="130" width="130" height="44" as="geometry" />
+          <mxGeometry x="20" y="130" width="150" height="44" as="geometry" />
         </mxCell>
         <mxCell id="redis" value="Redis pub/sub" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=8;fontSize=11;fillColor=#F8CECC;strokeColor=#B85450;fontColor=#232F3E;" vertex="1" parent="wl">
-          <mxGeometry x="380" y="127" width="130" height="50" as="geometry" />
+          <mxGeometry x="250" y="127" width="150" height="50" as="geometry" />
         </mxCell>
         <mxCell id="logproc" value="log-message-processor&lt;br&gt;Python" style="rounded=1;whiteSpace=wrap;html=1;fontSize=11;fillColor=#DAE8FC;strokeColor=#6C8EBF;fontColor=#232F3E;" vertex="1" parent="wl">
-          <mxGeometry x="560" y="130" width="150" height="44" as="geometry" />
+          <mxGeometry x="480" y="130" width="150" height="44" as="geometry" />
         </mxCell>
         <mxCell id="canary" value="&lt;b&gt;Production canary&lt;/b&gt;&lt;br&gt;10 → 25 → 50 → 100 %&lt;br&gt;each step gated by an AnalysisRun over the Prometheus error ratio; an abort restores stable" style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fontSize=11;align=left;verticalAlign=top;spacing=8;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#232F3E;" vertex="1" parent="wl">
           <mxGeometry x="740" y="30" width="225" height="110" as="geometry" />
@@ -544,19 +544,19 @@
         <mxCell id="wl_note" value="Service-to-service traffic runs inside the Istio mesh with STRICT mTLS. No service keeps durable data; Redis is neither persisted nor replicated, which is why production fails over rather than runs active-active." style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontSize=11;fontColor=#232F3E;" vertex="1" parent="wl">
           <mxGeometry x="20" y="186" width="700" height="46" as="geometry" />
         </mxCell>
-        <mxCell id="a1" value="login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="fe" target="auth">
+        <mxCell id="a1" value="login" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="fe" target="auth">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a2" value="verify user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="auth" target="users_api">
+        <mxCell id="a2" value="verify user" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="auth" target="users_api">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a3" value="todos + JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="fe" target="todos">
+        <mxCell id="a3" value="todos + JWT" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="fe" target="todos">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a4" value="publish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="todos" target="redis">
+        <mxCell id="a4" value="publish" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="todos" target="redis">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="a5" value="subscribe" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;" edge="1" parent="1" source="redis" target="logproc">
+        <mxCell id="a5" value="subscribe" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#6C8EBF;strokeWidth=1;fontSize=9;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="redis" target="logproc">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="durable" value="shd — shared and durable" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontSize=12;fillColor=#F8F9FA;strokeColor=#545B64;fontColor=#232F3E;" vertex="1" parent="region">
@@ -598,7 +598,7 @@
         <mxCell id="recovery" value="&lt;b&gt;Recovery design (ADR-0001)&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;b&gt;If us-east-1 or the AWS account is lost&lt;/b&gt;, production fails over to AKS through health-checked DNS failover. The mode is active-passive.&lt;br&gt;&lt;br&gt;&lt;b&gt;Dual-provider DNS.&lt;/b&gt; The registrar delegates microtodosuite.online to both Route 53 and Azure DNS, and Terraform keeps both record sets identical, so failover does not depend on the AWS account surviving.&lt;br&gt;&lt;br&gt;&lt;b&gt;What is copied here in advance:&lt;/b&gt; every production image by digest, the four production secrets, Terraform state replicas, and Velero backups of eco.&lt;br&gt;&lt;br&gt;&lt;b&gt;RPO:&lt;/b&gt; zero for mirrored images and secrets; the last backup for eco; in-memory application data is lost.&lt;br&gt;&lt;b&gt;RTO:&lt;/b&gt; minutes — scale the warm standby and fail DNS over.&lt;br&gt;&lt;br&gt;eco is restored from its backups rather than failed over; fdev and fstg wait for the region. Active-active latency routing is excluded until a replicated data store exists." style="rounded=1;arcSize=4;whiteSpace=wrap;html=1;fontSize=11;align=left;verticalAlign=top;spacing=8;fillColor=#FFFFFF;strokeColor=#9E9E9E;fontColor=#232F3E;" vertex="1" parent="azure">
           <mxGeometry x="20" y="620" width="380" height="440" as="geometry" />
         </mxCell>
-        <mxCell id="lane" value="Delivery — GitHub (MicroTodoSuite organization) and GitOps" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontSize=12;fillColor=#F8F9FA;strokeColor=#545B64;fontColor=#232F3E;" vertex="1" parent="1">
+        <mxCell id="lane" value="Delivery — GitHub and GitOps" style="rounded=1;arcSize=3;whiteSpace=wrap;html=1;container=1;collapsible=0;recursiveResize=0;verticalAlign=top;align=left;spacingLeft=10;spacingTop=4;fontStyle=1;fontSize=12;fillColor=#F8F9FA;strokeColor=#545B64;fontColor=#232F3E;" vertex="1" parent="1">
           <mxGeometry x="250" y="1200" width="1930" height="250" as="geometry" />
         </mxCell>
         <mxCell id="gh_gitops" value="microservice-app-gitops&lt;br&gt;fdev → fstg → fprd PRs&lt;br&gt;gate-prod approval" style="verticalLabelPosition=bottom;html=1;verticalAlign=top;align=center;strokeColor=none;fillColor=#24292E;shape=mxgraph.azure.github_code;pointerEvents=1;fontSize=11;" vertex="1" parent="lane">
@@ -621,13 +621,12 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="t3" value="3 · Istio gateway to frontend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#232F3E;strokeWidth=2;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="alb_fprd" target="fe">
+        <mxCell id="t3" value="3 · Istio gateway to frontend" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=block;endFill=1;strokeColor=#232F3E;strokeWidth=2;fontSize=10;labelBackgroundColor=#FFFFFF;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="alb_fprd" target="fe">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1440" y="458" />
               <mxPoint x="1440" y="874" />
-              <mxPoint x="615" y="874" />
-              <mxPoint x="615" y="944" />
+              <mxPoint x="535" y="874" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -694,7 +693,7 @@
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="d3" value="pulls desired state" style="edgeStyle=orthogonalEdgeStyle;rounded=0;html=1;endArrow=open;endFill=0;dashed=1;strokeColor=#7D3C98;strokeWidth=1.5;fontSize=10;fontColor=#7D3C98;labelBackgroundColor=#FFFFFF;exitX=0.5;exitY=0;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="gh_gitops" target="argocd">
-          <mxGeometry relative="1" as="geometry">
+          <mxGeometry relative="1" as="geometry" x="-0.95">
             <Array as="points">
               <mxPoint x="420" y="741" />
             </Array>
