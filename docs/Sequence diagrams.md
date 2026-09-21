@@ -1,11 +1,15 @@
 # Sequence diagrams
 
-**Status**: current as of 2026-09-20.
+**Status**: current as of 2026-09-21.
 **Companion to**: [Architecture diagrams](Architecture%20diagrams.md), which shows the
 structure. This page shows the flows that structure carries.
 
 Every diagram below describes what is implemented today. Where a step exists only
 in the full profile, or only as a plan, it says so.
+
+The same six diagrams are drawn in draw.io, one page each, in
+[MicroTodoSuite sequence diagrams.drawio](assets/MicroTodoSuite%20sequence%20diagrams.drawio),
+rendered from this page. A change to a sequence here needs the same change there.
 
 ## A commit becomes a signed image
 
@@ -123,7 +127,8 @@ sequenceDiagram
 ## A profile goes down and comes back
 
 `scripts/aws-profile-lifecycle.sh` in `microservice-app-ops` is the only way the
-runtime is created or destroyed. Applies use a saved plan and nothing else.
+runtime is created or destroyed. Applies use a saved plan and nothing else, and
+the way down needs no GitOps pull request.
 
 ```mermaid
 sequenceDiagram
@@ -131,29 +136,35 @@ sequenceDiagram
     actor Op as Operator
     participant LC as aws-profile-lifecycle.sh
     participant EC2 as EC2 API
-    participant GO as microservice-app-gitops
     participant TF as Terraform
     participant AWS as AWS
+    participant GO as microservice-app-gitops
 
-    Note over Op,AWS: Down
+    Note over Op,GO: Down
     Op->>LC: snapshot-volumes
     LC->>EC2: snapshot every EBS CSI volume
-    Op->>GO: merge the quiescence revision (workloads removed)
-    Op->>LC: plan down --gitops-revision SHA --volume-record DIR
-    LC->>LC: refuse unless the revision is merged and the record predates it
-    LC->>TF: produce saved plans, JSON evidence and checksums
-    Op->>LC: apply down (exact saved plan only)
-    LC->>AWS: destroy runtime resources, keep the durable ones
-    Note over Op,AWS: Up
+    Op->>LC: quiescence-receipt with the volume record
+    LC->>EC2: dry-run inventory of the sweepable runtime resources
+    LC-->>Op: checksummed receipt, nothing mutated
+    Op->>LC: plan down with the receipt and the volume record
+    LC->>LC: refuse a tampered, mismatched or out-of-order receipt
+    LC->>TF: saved plans, JSON evidence and checksums
+    Op->>LC: apply down, exact saved plans only
+    LC->>AWS: destroy the cluster, the workload bundle
+    LC->>EC2: post-destroy sweep of what the controllers left behind
+    Note over LC,EC2: listeners, load balancers, target groups, orphaned ENIs, security groups, then snapshotted volumes, each revalidated just before deletion
+    LC->>AWS: destroy the runtime network, keep the durable layer
+    Note over Op,GO: Up
     Op->>LC: plan up, then apply up
     LC->>AWS: recreate VPC, cluster and nodes
-    Op->>LC: bootstrap-cluster.sh (two audited mutations)
-    LC->>GO: ArgoCD reconciles the unchanged desired state
+    Op->>GO: bootstrap-cluster.sh, the two audited mutations
+    GO->>AWS: ArgoCD reconciles the unchanged desired state
 ```
 
-> The `--gitops-revision` gate is what makes every shutdown cost a pull request.
-> Replacing it with a receipt the wrapper produces itself is
-> `ops specs/003-profile-lifecycle` T016.
+> Until microservice-app-ops#122 (2026-09-20) the way down needed a merged GitOps
+> quiescence pull request, named by `--gitops-revision`. The receipt replaces it,
+> and the sweep removes the load balancers, security groups, network interfaces
+> and volumes the cluster's controllers created, which Terraform does not own.
 
 ## A secret reaches a pod without touching Git
 

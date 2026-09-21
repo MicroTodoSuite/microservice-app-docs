@@ -1,6 +1,6 @@
 # Architecture
 
-**Status**: current as of 2026-09-11.
+**Status**: current as of 2026-09-21.
 **Decisions it rests on**: [constitution](../constitution.md) 4.0.0 and
 [ADR-0001: Multicloud strategy](ADR-0001%20Multicloud%20strategy.md).
 
@@ -9,14 +9,30 @@ runs it for Lexfield Legal on AWS, with Azure as an independent recovery domain.
 Terraform owns the cloud foundations, and ArgoCD owns everything that runs in a
 cluster.
 
+## Diagram index
+
+Every diagram listed here describes the architecture as designed, not what happens
+to be running on a given day; the Current state section below records that. The
+draw.io files open in draw.io desktop or at app.diagrams.net.
+
+| File | Pages | Kind | Describes |
+| --- | --- | --- | --- |
+| [MicroTodoSuite infrastructure.drawio](assets/MicroTodoSuite%20infrastructure.drawio) | Economical profile · Full profile | Cloud infrastructure, official AWS and Azure icons | The design as of 2026-09-21 |
+| [MicroTodoSuite architecture views.drawio](assets/MicroTodoSuite%20architecture%20views.drawio) | Application · Platform overview · Namespace isolation | Architecture views | The design as of 2026-09-21 |
+| [MicroTodoSuite flows.drawio](assets/MicroTodoSuite%20flows.drawio) | Delivery pipeline · Observability | Flows | The design as of 2026-09-21 |
+| [MicroTodoSuite sequence diagrams.drawio](assets/MicroTodoSuite%20sequence%20diagrams.drawio) | Service CI · Promotion · Production canary · Rollback · Profile lifecycle · Secret delivery | Sequences, rendered from [Sequence diagrams](Sequence%20diagrams.md) | The implementation as of 2026-09-21 |
+| [Sequence diagrams](Sequence%20diagrams.md) | Six Mermaid sequences | Sequences that render on GitHub | The implementation as of 2026-09-21 |
+| The three Mermaid diagrams on this page | Application · Platform · Delivery | Summaries that render on GitHub | The design as of 2026-09-21 |
+| `assets/Initial Proposal Diagram.png`, `assets/Solution Diagram.png` | — | Design history | The retired 2025 Azure Container Apps design |
+
 ## Application
 
 ```mermaid
 flowchart LR
-  browser([Browser]) --> frontend["frontend<br/>Vue.js"]
-  frontend -->|log in| auth["auth-api<br/>Go"]
-  auth -->|verify credentials| users["users-api<br/>Java, Spring Boot"]
-  frontend -->|todo operations, JWT| todos["todos-api<br/>Node.js"]
+  browser([Browser]) -->|HTTPS| frontend["frontend :8080<br/>Vue.js, served by nginx"]
+  frontend -->|log in| auth["auth-api :8000<br/>Go, issues the JWT"]
+  auth -->|verify the user| users["users-api :8083<br/>Java, Spring Boot"]
+  frontend -->|todo operations, JWT| todos["todos-api :8082<br/>Node.js"]
   todos -->|publish log events| redis[("Redis Pub/Sub")]
   redis -->|subscribe| logproc["log-message-processor<br/>Python"]
 ```
@@ -39,22 +55,29 @@ flowchart TB
       oidc["GitHub OIDC provider<br/>and CI roles"]
       egress["Egress hub<br/>Transit Gateway and NAT"]
     end
-    eco["eco: one EKS cluster<br/>dev, staging, prod namespaces"]
+    eco["eco: one EKS cluster<br/>dev, staging, prod and demo namespaces"]
     subgraph full["Full profile"]
       fdev["fdev: EKS cluster and VPC"]
       fstg["fstg: EKS cluster and VPC"]
       fprd["fprd: EKS cluster and VPC"]
     end
   end
-  subgraph azure["Azure recovery domain (planned)"]
+  subgraph azure["Azure recovery domain"]
     aks["Warm-standby AKS for fprd"]
+    azdns["Azure DNS<br/>secondary name servers"]
     acr[("ACR image mirror")]
     kv[("Key Vault")]
     blob[("Blob storage<br/>state replicas and backups")]
   end
+  dns -->|eco hosts| eco
   dns -->|primary| fprd
   dns -.->|health-checked failover| aks
+  dns ---|identical records| azdns
+  fdev & fstg & fprd -->|egress| egress
   ecr -.->|copy by digest| acr
+  secrets -.->|seed four secrets| kv
+  state -.->|replicas| blob
+  eco -.->|Velero backups| blob
 ```
 
 The same platform is drawn in detail, with the official AWS and Azure icons, in
@@ -101,11 +124,12 @@ are drawn in [Sequence diagrams](Sequence%20diagrams.md).
 
 ```mermaid
 flowchart LR
-  pr["Service pull request"] --> ci["Reusable CI<br/>build, test, scan, SBOM, sign"]
+  pr["Service pull request"] --> gates["PR gates<br/>unit, integration, contract, Sonar, Trivy"]
+  gates --> ci["Reusable CI on main<br/>build once, scan, SBOM, sign"]
   ci -->|image by digest| ecr[("ECR")]
-  ci --> promote["Promotion pull request<br/>microservice-app-gitops"]
-  promote --> argocd["ArgoCD"]
-  argocd --> clusters["EKS clusters"]
+  ci --> promote["Promotion pull requests<br/>dev, staging, then prod after gate-prod"]
+  promote --> argocd["ArgoCD in each cluster"]
+  argocd --> clusters["EKS clusters<br/>prod as an Argo Rollouts canary"]
 ```
 
 - Each service calls the reusable workflows in `MicroTodoSuite/.github`. An image
