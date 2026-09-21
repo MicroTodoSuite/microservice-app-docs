@@ -406,7 +406,7 @@
             <mxPoint x="560.0" y="388" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="v8" value="A direct kubectl apply is forbidden; it would be reverted by the next sync" style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;spacingLeft=8;fontSize=11;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#232F3E;" vertex="1" parent="1">
+        <mxCell id="v8" value="A direct kubectl apply is forbidden, because the next sync would revert it" style="shape=note;whiteSpace=wrap;html=1;size=12;align=left;spacingLeft=8;fontSize=11;fillColor=#FFF2CC;strokeColor=#D6B656;fontColor=#232F3E;" vertex="1" parent="1">
           <mxGeometry x="50.0" y="420" width="800.0" height="31" as="geometry" />
         </mxCell>
       </root>

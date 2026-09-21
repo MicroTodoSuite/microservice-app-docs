@@ -121,7 +121,7 @@ sequenceDiagram
     ARGO->>ARGO: detect OutOfSync
     ARGO->>K8s: apply the previous digest
     K8s-->>ARGO: Healthy on the previous revision
-    Note over Op,K8s: A direct kubectl apply is forbidden; it would be reverted by the next sync
+    Note over Op,K8s: A direct kubectl apply is forbidden, because the next sync would revert it
 ```
 
 ## A profile goes down and comes back
@@ -152,7 +152,7 @@ sequenceDiagram
     Op->>LC: apply down, exact saved plans only
     LC->>AWS: destroy the cluster, the workload bundle
     LC->>EC2: post-destroy sweep of what the controllers left behind
-    Note over LC,EC2: listeners, load balancers, target groups, orphaned ENIs, security groups, then snapshotted volumes, each revalidated just before deletion
+    Note over LC,EC2: listeners, load balancers, target groups,<br/>orphaned ENIs, security groups, then snapshotted volumes,<br/>each revalidated just before deletion
     LC->>AWS: destroy the runtime network, keep the durable layer
     Note over Op,GO: Up
     Op->>LC: plan up, then apply up

@@ -45,39 +45,30 @@ exists, and it is the reason the platform does not route users across clouds.
 ## Platform
 
 ```mermaid
-flowchart TB
+flowchart LR
+  users([Users]) --> dns["Route 53<br/>microtodosuite.online"]
   subgraph aws["AWS, us-east-1 (primary)"]
-    subgraph shd["shd: account-level singletons"]
-      state[("S3 state backend<br/>and KMS key")]
-      ecr[("ECR")]
-      secrets[("Secrets Manager")]
-      dns["Route 53 public zone"]
-      oidc["GitHub OIDC provider<br/>and CI roles"]
-      egress["Egress hub<br/>Transit Gateway and NAT"]
+    direction TB
+    eco["eco: one EKS cluster<br/>dev, staging, prod and demo"]
+    subgraph full["Full profile, behind the shd egress hub"]
+      direction TB
+      fdev["fdev: EKS and VPC"]
+      fstg["fstg: EKS and VPC"]
+      fprd["fprd: EKS and VPC"]
     end
-    eco["eco: one EKS cluster<br/>dev, staging, prod and demo namespaces"]
-    subgraph full["Full profile"]
-      fdev["fdev: EKS cluster and VPC"]
-      fstg["fstg: EKS cluster and VPC"]
-      fprd["fprd: EKS cluster and VPC"]
-    end
+    shd[("shd: state and KMS, ECR,<br/>Secrets Manager, GitHub OIDC")]
   end
   subgraph azure["Azure recovery domain"]
+    direction TB
     aks["Warm-standby AKS for fprd"]
+    copies[("ACR, Key Vault and Blob storage:<br/>images, secrets, state and backups")]
     azdns["Azure DNS<br/>secondary name servers"]
-    acr[("ACR image mirror")]
-    kv[("Key Vault")]
-    blob[("Blob storage<br/>state replicas and backups")]
   end
   dns -->|eco hosts| eco
   dns -->|primary| fprd
   dns -.->|health-checked failover| aks
-  dns ---|identical records| azdns
-  fdev & fstg & fprd -->|egress| egress
-  ecr -.->|copy by digest| acr
-  secrets -.->|seed four secrets| kv
-  state -.->|replicas| blob
-  eco -.->|Velero backups| blob
+  shd -.->|copied by digest, seeded, replicated| copies
+  eco -.->|Velero backups| copies
 ```
 
 The same platform is drawn in detail, with the official AWS and Azure icons, in
