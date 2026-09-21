@@ -59,10 +59,10 @@ flowchart TB
 
 The same platform is drawn in detail, with the official AWS and Azure icons, in
 [MicroTodoSuite infrastructure.drawio](assets/MicroTodoSuite%20infrastructure.drawio):
-one page for the economical profile as built, one for the full profile's target
-architecture. Open it with draw.io, desktop or app.diagrams.net. The Mermaid diagram
-above is the summary; the draw.io file is the one to edit when the infrastructure
-changes.
+one page per profile, each drawing the architecture as designed rather than what
+is running at a given moment — the Current state section below records that. Open it
+with draw.io, desktop or app.diagrams.net. The Mermaid diagram above is the summary;
+the draw.io file is the one to edit when the design changes.
 
 ### Environments
 
