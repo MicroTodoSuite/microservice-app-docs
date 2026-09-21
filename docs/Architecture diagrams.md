@@ -57,6 +57,13 @@ flowchart TB
   ecr -.->|copy by digest| acr
 ```
 
+The same platform is drawn in detail, with the official AWS and Azure icons, in
+[MicroTodoSuite infrastructure.drawio](assets/MicroTodoSuite%20infrastructure.drawio):
+one page for the economical profile as built, one for the full profile's target
+architecture. Open it with draw.io, desktop or app.diagrams.net. The Mermaid diagram
+above is the summary; the draw.io file is the one to edit when the infrastructure
+changes.
+
 ### Environments
 
 | Environment | Profile | Runs in | Isolation |
@@ -132,10 +139,14 @@ Jaeger — is defined in `microservice-app-gitops` spec 006.
 ## Current state
 
 On 2026-09-11 the AWS runtime was taken down for the approved rebuild under the
-`lex-mts` names, recorded in `microservice-app-ops` spec 004. The persistent
-resources — the state backend, ECR images, secrets, the public zone, and the
-GitHub OIDC trust — were preserved. The Azure recovery domain is not yet built.
-The constitution's "Current state vs. plan" table tracks each capability.
+`lex-mts` names, recorded in `microservice-app-ops` spec 004. The economical profile
+came back under those names on 2026-09-14, with all of its Applications Synced and
+Healthy, and was published under `eco.microtodosuite.online` on 2026-09-15. The same
+day both profiles' runtime was taken down again through the lifecycle wrapper. The
+persistent resources — the state backend, KMS keys, ECR images, secrets, the public
+zone, the ACM certificate, and the GitHub OIDC trust — were preserved. No
+full-profile cluster exists, and the Azure recovery domain is not yet built. The
+constitution's "Current state vs. plan" table tracks each capability.
 
 ## Design history: Azure Container Apps (retired)
 
