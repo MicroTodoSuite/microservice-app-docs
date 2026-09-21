@@ -86,6 +86,12 @@ excluded, and spec 009 user story 5 schedules the Azure work last.
 
 ## Delivery
 
+The flows behind this section — how a commit becomes a signed image, how a digest
+reaches production, what the canary does when the analysis fails, how a rollback
+works, how a profile goes down and comes back, and how a secret reaches a pod —
+are drawn in [Sequence diagrams](Sequence%20diagrams.md).
+
+
 ```mermaid
 flowchart LR
   pr["Service pull request"] --> ci["Reusable CI<br/>build, test, scan, SBOM, sign"]
